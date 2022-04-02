@@ -32,7 +32,7 @@ public class Student {
                 line = bfr.readLine();
             }
             bfr.close();
-            if (progressFileLength.size() == 0) {
+            if (progressFileLength.size() <= 1) {
                 inProgress = false;
             } else {
                 inProgress = true;
@@ -48,14 +48,15 @@ public class Student {
             }
             bfr.close();
 
-            //If the list is in progress
+            //Gets length of quizProgressFile to for later to know what question to start on
+            int progressFileLengthInt = progressFileLength.size(); 
 
+            //If the list is in progress
             if (inProgress) {
                 //First line of quizFile is quiz name. Gets it to print to student but NOT to write to file
                 String quizName = list.get(0);
             
-                //Gets length of quizProgressFile to for later to know what question to start on
-                int progressFileLengthInt = progressFileLength.size(); 
+                
                 System.out.println(progressFileLengthInt);
 
                 //Starts output by printing out quiz name and if progress has been made
@@ -96,10 +97,10 @@ public class Student {
                     //Prints out question number, the question, and answers
                     System.out.println("Question number: " + i);
                     System.out.println(question);
-                    System.out.println(answerA);
-                    System.out.println(answerB);
-                    System.out.println(answerC);
-                    System.out.println(answerD);
+                    System.out.println("A: " + answerA);
+                    System.out.println("B: " + answerB);
+                    System.out.println("C: " + answerC);
+                    System.out.println("D: " + answerD);
 
                     //Asks user if they would like to answer by entering a number or a file and checks to see if the input is valid
                     int choice = 0;
@@ -124,7 +125,7 @@ public class Student {
                     String answerChoice;
                     if (choice == 1) {
                         do {
-                            System.out.println("Enter either A, B, C, or D");
+                            System.out.println("Enter either A, B, C, or D: ");
                             answerChoice = scanner.nextLine().toUpperCase();
                             if (!answerChoice.equals("A") && !answerChoice.equals("B") && !answerChoice.equals("C") && !answerChoice.equals("D")) {
                                 System.out.println("You must enter your answer in the correct format!");
@@ -134,8 +135,10 @@ public class Student {
                         do {
                             ArrayList<String> listAns = new ArrayList<>();
                             System.out.println("Enter file name with the letter of your answer at the front of the first line:");
-                            String answerFile = scanner.nextLine();
-                            FileReader frAns = new FileReader(answerFile);
+                            String fileInput = scanner.nextLine();
+                            File answerFile = new File(fileInput);
+                            answerFile.createNewFile();
+                            FileReader frAns = new FileReader(fileInput);
                             BufferedReader bfrAns = new BufferedReader(frAns);
                             String lineAns = bfrAns.readLine();
                             while (lineAns != null) {
@@ -176,11 +179,13 @@ public class Student {
             } else {
                 //First line of quizFile is quiz name. Gets it and writes quiz name to progressFile
                 String quizName = list.get(0);
-            
-                FileOutputStream fos = new FileOutputStream(quizProgressFileName, true);
-                PrintWriter pw = new PrintWriter(fos);
-                pw.println(quizName);
-                pw.close();
+                if (progressFileLengthInt == 0) {
+                    FileOutputStream fos = new FileOutputStream(quizProgressFileName, true);
+                    PrintWriter pw = new PrintWriter(fos);
+                    pw.println(quizName);
+                    pw.close();
+                }
+                
 
                 //Starts output by printing out quiz name
                 System.out.println(quizName);
@@ -217,11 +222,12 @@ public class Student {
                     String answerD = l.substring(l.indexOf("@D:") + 3);
 
                     //Prints out question and answers
+                    System.out.println("Question number: " + i);
                     System.out.println(question);
-                    System.out.println(answerA);
-                    System.out.println(answerB);
-                    System.out.println(answerC);
-                    System.out.println(answerD);
+                    System.out.println("A: " + answerA);
+                    System.out.println("B: " + answerB);
+                    System.out.println("C: " + answerC);
+                    System.out.println("D: " + answerD);
 
                     //Asks user if they would like to answer by entering a number or a file and checks to see if the input is valid
                     int choice = 0;
@@ -246,7 +252,7 @@ public class Student {
                     String answerChoice;
                     if (choice == 1) {
                         do {
-                            System.out.println("Enter either A, B, C, or D");
+                            System.out.println("Enter either A, B, C, or D: ");
                             answerChoice = scanner.nextLine().toUpperCase();
                             if (!answerChoice.equals("A") && !answerChoice.equals("B") && !answerChoice.equals("C") && !answerChoice.equals("D")) {
                                 System.out.println("You must enter your answer in the correct format!");
@@ -256,7 +262,9 @@ public class Student {
                         do {
                             ArrayList<String> listAns = new ArrayList<>();
                             System.out.println("Enter file name with the letter of your answer at the front of the first line:");
-                            String answerFile = scanner.nextLine();
+                            String fileInput = scanner.nextLine();
+                            File answerFile = new File(fileInput);
+                            answerFile.createNewFile();
                             FileReader frAns = new FileReader(answerFile);
                             BufferedReader bfrAns = new BufferedReader(frAns);
                             String lineAns = bfrAns.readLine();
@@ -265,6 +273,7 @@ public class Student {
                                 lineAns = bfrAns.readLine();
                             }
                             bfrAns.close();
+                            System.out.println(listAns.size());
                             if (listAns.size() == 0) {
                                 answerChoice = "Z";
                             } else {
@@ -285,8 +294,8 @@ public class Student {
                     }
 
                     //Writes to quizProgress file
-                    fos = new FileOutputStream(quizProgressFileName, true);
-                    pw = new PrintWriter(fos);
+                    FileOutputStream fos = new FileOutputStream(quizProgressFileName, true);
+                    PrintWriter pw = new PrintWriter(fos);
                     if (correct) {
                         pw.println(list.get(i).substring(0, 4) + question + "@Choice:" + answerChoice + "@" + "Correct");
                         pw.close();
@@ -298,6 +307,7 @@ public class Student {
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            //System.out.println("File not found!");
         } catch (IOException e) {
             e.printStackTrace();
         }
