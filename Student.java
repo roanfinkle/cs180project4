@@ -152,7 +152,7 @@ public class Student {
                                 answerChoice = listAns.get(0).substring(0, 1).toUpperCase();
                             }
                             if (!answerChoice.equals("A") && !answerChoice.equals("B") && !answerChoice.equals("C") && !answerChoice.equals("D")) {
-                                System.out.println("Your file must be in the correct format!");
+                                System.out.println("Either your file does not exist or it is in the wrong format!");
                             }
                         } while(!answerChoice.equals("A") && !answerChoice.equals("B") && !answerChoice.equals("C") && !answerChoice.equals("D")); 
                     }
@@ -280,7 +280,7 @@ public class Student {
                                 answerChoice = listAns.get(0).substring(0, 1).toUpperCase();
                             }
                             if (!answerChoice.equals("A") && !answerChoice.equals("B") && !answerChoice.equals("C") && !answerChoice.equals("D")) {
-                                System.out.println("Your file must be in the correct format!");
+                                System.out.println("Either your file does not exist or it is in the wrong format!");
                             }
                         } while(!answerChoice.equals("A") && !answerChoice.equals("B") && !answerChoice.equals("C") && !answerChoice.equals("D")); 
                     }
