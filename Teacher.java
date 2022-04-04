@@ -93,9 +93,11 @@ public class Teacher {
                 System.out.println("Enter Question " + questionNumber + ":");
                 questions[i] = scan.nextLine();
                 System.out.println("Enter Question " + questionNumber + "'s answer options on separate lines:");
-                for (int j = 0; j < 4; j++) {
+                int j = 0;
+                for (j = 0; j < 4; j++) {
                     options[j] = scan.nextLine();
                 }
+                j = 0;
                 System.out.println("Enter Question " + questionNumber + "'s answer:");
                 answers[i] = scan.nextLine();
 
