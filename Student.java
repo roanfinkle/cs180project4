@@ -94,6 +94,18 @@ public class Student {
                     String answerC = l.substring(l.indexOf("@C:") + 3, l.indexOf("@D:"));
                     String answerD = l.substring(l.indexOf("@D:") + 3);
 
+                    //Finds the String of the correct answer for writing later
+                    String answerCorrect;
+                    if (correctAnswer.equals("A")) {
+                        answerCorrect = answerA;
+                    } else if (correctAnswer.equals("B")) {
+                        answerCorrect = answerB;
+                    } else if (correctAnswer.equals("C")) {
+                        answerCorrect = answerC;
+                    } else {
+                        answerCorrect = answerD;
+                    }
+
                     //Prints out question number, the question, and answers
                     System.out.println("Question number: " + i);
                     System.out.println(question);
@@ -157,24 +169,11 @@ public class Student {
                         } while(!answerChoice.equals("A") && !answerChoice.equals("B") && !answerChoice.equals("C") && !answerChoice.equals("D")); 
                     }
 
-                    //Checks if answerChoice is the same as correctAnswer
-                    boolean correct;
-                    if (answerChoice.equals(correctAnswer)) {
-                        correct = true;
-                    } else {
-                        correct = false;
-                    }
-
-                    //Writes to quizProgress file
+                    //Writes to quizProgress file in append mode
                     FileOutputStream fos = new FileOutputStream(quizProgressFileName, true);
                     PrintWriter pw = new PrintWriter(fos);
-                    if (correct) {
-                        pw.println(list.get(i).substring(0, 4) + question + "@Choice:" + answerChoice + "@" + "Correct");
-                        pw.close();
-                    } else {
-                        pw.println(list.get(i).substring(0, 4) + question + "@Choice:" + answerChoice + "@" + "Incorrect");
-                        pw.close();
-                    }       
+                    pw.println(list.get(i).substring(0, 4) + question + "@Choice:" + answerChoice + "@" + answerCorrect);
+                    pw.close();    
                 }
             } else {
                 //First line of quizFile is quiz name. Gets it and writes quiz name to progressFile
@@ -220,6 +219,18 @@ public class Student {
                     String answerB = l.substring(l.indexOf("@B:") + 3, l.indexOf("@C:"));
                     String answerC = l.substring(l.indexOf("@C:") + 3, l.indexOf("@D:"));
                     String answerD = l.substring(l.indexOf("@D:") + 3);
+
+                    //Finds the String of the correct answer for writing later
+                    String answerCorrect;
+                    if (correctAnswer.equals("A")) {
+                        answerCorrect = answerA;
+                    } else if (correctAnswer.equals("B")) {
+                        answerCorrect = answerB;
+                    } else if (correctAnswer.equals("C")) {
+                        answerCorrect = answerC;
+                    } else {
+                        answerCorrect = answerD;
+                    }
 
                     //Prints out question and answers
                     System.out.println("Question number: " + i);
@@ -285,24 +296,11 @@ public class Student {
                         } while(!answerChoice.equals("A") && !answerChoice.equals("B") && !answerChoice.equals("C") && !answerChoice.equals("D")); 
                     }
 
-                    //Checks if answerChoice is the same as correctAnswer
-                    boolean correct;
-                    if (answerChoice.equals(correctAnswer)) {
-                        correct = true;
-                    } else {
-                        correct = false;
-                    }
-
-                    //Writes to quizProgress file
+                    //Writes to quizProgress file in append mode
                     FileOutputStream fos = new FileOutputStream(quizProgressFileName, true);
                     PrintWriter pw = new PrintWriter(fos);
-                    if (correct) {
-                        pw.println(list.get(i).substring(0, 4) + question + "@Choice:" + answerChoice + "@" + "Correct");
-                        pw.close();
-                    } else {
-                        pw.println(list.get(i).substring(0, 4) + question + "@Choice:" + answerChoice + "@" + "Incorrect");
-                        pw.close();
-                    }       
+                    pw.println(list.get(i).substring(0, 4) + question + "@Choice:" + answerChoice + "@" + answerCorrect);
+                    pw.close();    
                 }
             }
         } catch (FileNotFoundException e) {
