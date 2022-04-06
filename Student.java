@@ -5,13 +5,85 @@ import java.util.Scanner;
 public class Student {
     private String quizFileName;
     private String quizProgressFileName;
-
+    private String username;
+    private String password;
+    private String name;
     //Student object constructor for a student with a quiz in progress
     public Student(String quizFileName, String quizProgressFileName) {
         this.quizFileName = quizFileName;
         this.quizProgressFileName = quizProgressFileName;
     }
+    public Student(String username, String password, String name){
+        this.username = username;
+        this.password = password;
+        this.name = name;
+    }
+    public void createStudentInFile(Student student) throws FileNotFoundException {
+        File file = new File("studentList.txt");
+        try(PrintWriter pw = new PrintWriter(new FileOutputStream(file, true))){
+            pw.println(student.name+"$$"+student.username+"$$"+student.password);
+        } catch (IOException e){
+            System.out.println("There was an error writing changes to the file!");
+        }
+    }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Student login(String username, String name, String password){
+        try {
+            ArrayList<String> students = readFile("studentList.txt");
+            for (int i = 0; i < students.size(); i++) {
+                if (!students.get(i).isBlank()) {
+                    String[] info = students.get(i).split("$");
+                    Student temp = new Student(info[1].trim(), info[2].trim(),info[3].trim());
+                    if (temp.getUsername().equals(username) && temp.getPassword().equals(password)) {
+                        return temp;
+                    }
+                }
+            }
+        } catch (Exception e){
+            System.out.println("There was a problem logging in, try again!");
+        }
+        return null;
+    }
+    public ArrayList<String> readFile(String fileName) {
+        ArrayList<String> tempString = new ArrayList<>();
+        File f = new File(fileName);
+        try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
+            while (true) {
+                String line = bfr.readLine();
+                if (line == null)
+                    break;
+                tempString.add(line);
+            }
+            return tempString;
+        } catch (IOException e) {
+            System.out.println("There was a problem reading from this file!");
+            return null;
+        }
+    }
     //Student method for taking the Quiz that is not in progress
     public void takeQuiz() {
         //Reads the quizFile
