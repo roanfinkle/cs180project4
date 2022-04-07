@@ -16,6 +16,74 @@ public class Teacher {
     public String quizName;
     public String course;
     public String fileName;
+    private String username;
+    private String password;
+    private String name;
+    
+    public void createTeacherInFile(Teacher teacher){
+        File file = new File("teacherList.txt");
+        try(PrintWriter pw = new PrintWriter(new FileOutputStream(file, true))){
+            pw.println(teacher.name+"$$"+teacher.username+"$$"+teacher.password);
+        } catch (IOException e){
+            System.out.println("There was an error writing changes to the file!");
+        }
+    }
+    public Teacher login(String username, String name, String password){
+        try {
+            ArrayList<String> students = readFile("teacherList.txt");
+            for (int i = 0; i < students.size(); i++) {
+                if (!students.get(i).isBlank()) {
+                    String[] info = students.get(i).split("$");
+                    Teacher temp = new Teacher(info[1].trim(), info[2].trim(),info[3].trim());
+                    if (temp.getUsername().equals(username) && temp.getPassword().equals(password)) {
+                        return temp;
+                    }
+                }
+            }
+        } catch (Exception e){
+            System.out.println("There was a problem logging in, try again!");
+        }
+        return null;
+    }
+    public ArrayList<String> readFile(String fileName) {
+        ArrayList<String> tempString = new ArrayList<>();
+        File f = new File(fileName);
+        try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
+            while (true) {
+                String line = bfr.readLine();
+                if (line == null)
+                    break;
+                tempString.add(line);
+            }
+            return tempString;
+        } catch (IOException e) {
+            System.out.println("There was a problem reading from this file!");
+            return null;
+        }
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
 
 
     // if choice == 1
