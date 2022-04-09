@@ -21,6 +21,7 @@ public class Student {
         BufferedReader br92 = new BufferedReader(new FileReader(f1)) ;
         int attemptNumber = Integer.parseInt(br92.readLine()) ;
         int noOfQuestions = Integer.parseInt(quizIdentifier.substring(quizIdentifier.indexOf('(') + 1 , quizIdentifier.indexOf(')' , quizIdentifier.indexOf('(') + 1))) ;
+        System.out.println(noOfQuestions) ;
         String[][] questionArray = new String[noOfQuestions][6] ;
         String[][] questionArray1 = new String[noOfQuestions][6] ;
         String[][] questionArray2 = new String[noOfQuestions][6] ;
@@ -62,6 +63,7 @@ public class Student {
                     copier = br56.readLine() ;
                 }
             }
+
             for (int k = 0 ; k < noOfQuestions ; k++) {
                 for (int g = 0 ; g < 6 ; g++) {
                     if (g == 0) {
@@ -272,7 +274,6 @@ public class Student {
                         pwStudentAnswersOnly.println(formatter.format(ts)) ;
                         pwGrading.println("total points - " + totalPoints) ;
                         PrintWriter pw901 = new PrintWriter(new FileWriter(f1), true) ;
-                        System.out.println(attemptNumber) ;
                         pw901.println(Integer.toString(attemptNumber + 1)) ;
                         pw901.flush() ;
                     } else {
@@ -450,7 +451,6 @@ public class Student {
                         pwStudentAnswersOnly.println(formatter.format(ts)) ;
                         pwGrading.println("total points - " + totalPoints) ;
                         PrintWriter pw901 = new PrintWriter(new FileWriter(f1), true) ;
-                        System.out.println(attemptNumber) ;
                         pw901.println(Integer.toString(attemptNumber + 1)) ;
                         pw901.flush() ;
                     }
@@ -626,7 +626,6 @@ public class Student {
                         pwStudentAnswersOnly.println(formatter.format(ts)) ;
                         pwGrading.println("total points - " + totalPoints) ;
                         PrintWriter pw901 = new PrintWriter(new FileWriter(f1), true) ;
-                        System.out.println(attemptNumber) ;
                         pw901.println(Integer.toString(attemptNumber + 1)) ;
                         pw901.flush() ;
                     } else {
@@ -636,11 +635,9 @@ public class Student {
                         for (int i = 1 ; i <= noOfQuestions ; i++) {
                             questionRandomize.add(i) ;
                         }
-                        int[] questionOrder = new int[5] ;
-                        for (int i = 1 ; i <= 5 ; i++) {
-                            int h = (int)(((Math.random()*((noOfQuestions - i+1)-1+1)+1)) - 1) ;
-                            questionOrder[i - 1] = questionRandomize.get(h) ;
-                            questionRandomize.remove(h) ;
+                        int[] questionOrder = new int[noOfQuestions] ;
+                        for (int i = 1 ; i <= noOfQuestions ; i++) {
+                            questionOrder[i - 1] = i ;
                         }
                         BufferedReader read = new BufferedReader(new FileReader(f457)) ;
                         PrintWriter pw98 = new PrintWriter(new FileWriter(f457), true) ;
@@ -653,18 +650,18 @@ public class Student {
                             String inLine = "" ;
                             for (int lp = 0 ; lp < 6 ; lp++) {
                                 if (lp % 6 == 0) {
-                                    inLine += Integer.toString(y + 1) + ". " + questionArray1[questionOrder[y]][0] + "@" ;
+                                    inLine += Integer.toString(y + 1) + ". " + questionArray1[questionOrder[y] - 1][0] + "@" ;
                                 }  else if (lp % 6 == 5) {
-                                    pw468.println(Integer.toString(y + 1) + ". " + questionArray1[questionOrder[y]][5]) ;
+                                    pw468.println(Integer.toString(y + 1) + ". " + questionArray1[questionOrder[y] - 1][5]) ;
                                 } else {
                                     if (lp == 1) {
-                                        inLine += "A) " + questionArray1[questionOrder[y]][lp] + "@" ;
+                                        inLine += "A) " + questionArray1[questionOrder[y] - 1][lp] + "@" ;
                                     } else if (lp == 2) {
-                                        inLine += "B) " + questionArray1[questionOrder[y]][lp] + "@" ;
+                                        inLine += "B) " + questionArray1[questionOrder[y] - 1][lp] + "@" ;
                                     } else if (lp== 3) {
-                                        inLine += "C) " + questionArray1[questionOrder[y]][lp] + "@" ;
+                                        inLine += "C) " + questionArray1[questionOrder[y] - 1][lp] + "@" ;
                                     } else {
-                                        inLine += "D) " + questionArray1[questionOrder[y]][lp] + "@" ;
+                                        inLine += "D) " + questionArray1[questionOrder[y] - 1][lp] + "@" ;
                                     }
                                 }
                             }
@@ -709,7 +706,11 @@ public class Student {
                                         System.out.println("Enter the file path") ;
                                         String responseFilePath = sc.nextLine() ;
                                         File fresponse = new File(responseFilePath) ;
-                                        if (fresponse.length() == 0) {
+                                        System.out.println(fresponse.createNewFile()) ;
+                                        BufferedReader mz = new BufferedReader(new FileReader(fresponse)) ;
+                                        String temp = mz.readLine() ;
+                                        System.out.println(temp) ;
+                                        if (fresponse.createNewFile() || temp == null) {
                                             System.out.println("The file does not exist or is empty. Please enter a valid file path") ;
                                         } else {
                                             BufferedReader re = new BufferedReader(new FileReader(fresponse)) ;
@@ -774,11 +775,12 @@ public class Student {
                         Timestamp ts = new Timestamp(date.getTime());
                         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         pwsft.println(formatter.format(ts)) ;
-                        pwStudentAnswersOnly.println(formatter.format(ts)) ;
                         System.out.println("This quiz is over and is being submitted") ;
                         File quizGradingReport = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "$$gradingReport.txt") ;
+                        quizGradingReport.createNewFile() ;
                         BufferedReader brGrading = new BufferedReader(new FileReader(quizGradingReport)) ;
-                        PrintWriter pwGrading = new PrintWriter(new FileWriter(quizGradingReport)) ;
+                        PrintWriter pwGrading = new PrintWriter(new FileWriter(quizGradingReport), true) ;
+                        //File rt = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "Solutions.txt") ;
                         BufferedReader brGradingFrom = new BufferedReader(new FileReader(f468)) ;
                         BufferedReader brGraded = new BufferedReader(new FileReader(studentAnswersOnly)) ;
                         String checked = brGraded.readLine() ;
@@ -796,9 +798,10 @@ public class Student {
                             checked = brGraded.readLine() ;
                             checker = brGradingFrom.readLine() ;
                         }
+                        pwStudentAnswersOnly.println(formatter.format(ts)) ;
                         pwGrading.println("total points - " + totalPoints) ;
                         PrintWriter pw901 = new PrintWriter(new FileWriter(f1), true) ;
-                        pw901.print(Integer.toString(attemptNumber + 1)) ;
+                        pw901.println(Integer.toString(attemptNumber + 1)) ;
                         pw901.flush() ;
                     }
                 }
