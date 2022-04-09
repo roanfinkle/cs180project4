@@ -803,8 +803,10 @@ public class Runner {
                                 } else {
                                     int c = 0;
                                     while (findTeacher != null) {
-                                        if (findTeacher.substring(0, findTeacher.indexOf("$")).toUpperCase().equals(teacherName.toUpperCase())) {
-                                            c++;
+                                        if (!findTeacher.equals("null")) {
+                                            if (findTeacher.substring(0, findTeacher.indexOf("$")).toUpperCase().equals(teacherName.toUpperCase())) {
+                                                c++;
+                                            }
                                         }
                                         findTeacher = bg.readLine();
                                     }
@@ -845,8 +847,37 @@ public class Runner {
                                                         if (c == 0) {
                                                             System.out.println("This quiz does not exist");
                                                         } else {
-                                                            Student student = new Student();
-                                                            student.takeQuiz(name, teacherName, courseName, choice90, quizIdentifier);
+                                                            BufferedReader br739 = new BufferedReader((new FileReader(teacherName + "$$" + courseName + "$$" + choice90 + ".txt"))) ;
+                                                            String copier = br739.readLine() ;
+                                                            int noOfQuestionsRequired = Integer.parseInt(quizIdentifier.substring(quizIdentifier.indexOf('(') + 1 , quizIdentifier.indexOf(')' , quizIdentifier.indexOf('(') + 1))) ;
+                                                            int c34 = -1 ;
+                                                            while(copier != null) {
+                                                                c34++ ;
+                                                                copier = br739.readLine() ;
+                                                            }
+                                                            if (c34 % 5 == 0) {
+                                                                if (quizIdentifier.contains("pool")) {
+                                                                    if ((c34 / 5) >= 5) {
+                                                                        String s = quizIdentifier.substring(quizIdentifier.indexOf(')' , quizIdentifier.indexOf('(') + 1)) ;
+                                                                        quizIdentifier = quizIdentifier.substring(0, quizIdentifier.indexOf('(') + 1) + Integer.toString(c34/5) + s ;
+                                                                        Student student = new Student();
+                                                                        student.takeQuiz(name, teacherName, courseName, choice90, quizIdentifier);
+                                                                    } else {
+                                                                        System.out.println("The quiz is yet to be completed by the teacher") ;
+                                                                    }
+                                                                } else if (quizIdentifier.contains("exact")) {
+                                                                    if ((c34 / 5) >= noOfQuestionsRequired) {
+                                                                        String s = quizIdentifier.substring(quizIdentifier.indexOf(')' , quizIdentifier.indexOf('(') + 1)) ;
+                                                                        quizIdentifier = quizIdentifier.substring(0, quizIdentifier.indexOf('(') + 1) + Integer.toString(c34/5) + s ;
+                                                                        Student student = new Student();
+                                                                        student.takeQuiz(name, teacherName, courseName, choice90, quizIdentifier);
+                                                                    } else {
+                                                                        System.out.println("The quiz is yet to be completed by the teacher") ;
+                                                                    }
+                                                                }
+                                                            } else {
+                                                                System.out.println("The quiz is yet to be completed by the teacher") ;
+                                                            }
                                                         }
                                                         ki = false;
                                                         break;
