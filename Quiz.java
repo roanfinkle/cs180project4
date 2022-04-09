@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Quiz {
@@ -138,20 +139,20 @@ public class Quiz {
                 pw.println(title);
                 boolean g;
                 do {
-                    int option;
+                    String option;
                     boolean h;
                     do {
                         System.out.println("Do you want to enter a question statement?\n1. yes\n2. no");
-                        option = sc.nextInt();
+                        option = sc.nextLine();
                         sc.nextLine();
-                        if (!(option == 1 || option == 2)) {
+                        if (!(option.equals("1") || option.equals("2"))) {
                             System.out.println("Enter a valid option");
                             h = false;
                         } else {
                             h = true;
                         }
                     } while (!h);
-                    if (option == 1) {
+                    if (option.equals("1")) {
                         System.out.println("Enter the question statement");
                         String qs = sc.nextLine();
                         questionNumber++;
@@ -184,8 +185,16 @@ public class Quiz {
                                 System.out.println("Enter the fourth option and then the answer to this question");
                                 System.out.println("Enter the fourth option");
                                 answerChoices = sc.nextLine();
-                                System.out.println("Enter the answer. The option will be added to the quiz only after the the answer is entered.");
-                                String answer = sc.nextLine();
+                                System.out.println("Enter the answer as either A, B, C or D. The option will be added to the quiz only after the the answer is entered.");
+                                String answer ;
+                                do {
+                                    answer = sc.nextLine();
+                                    if (answer.equals("A") || answer.equals("B") || answer.equals("C") || answer.equals("D")) {
+                                        break ;
+                                    } else {
+                                        System.out.println("Enter a valid answer.") ;
+                                    }
+                                } while (true) ;
                                 s += "D) " + answerChoices + '\n';
                                 l += answer.toUpperCase() + "\n";
                                 PrintWriter pw1 = new PrintWriter(new FileWriter(f2), true);
@@ -210,10 +219,10 @@ public class Quiz {
                     System.out.println("3. Delete a question");
                     System.out.println("4. Replace a question");
                     System.out.println("5. Exit the quiz without editing");
-                    int option6 = sc.nextInt();
+                    String option6 = sc.nextLine();
                     sc.nextLine();
                     switch (option6) {
-                        case 1: {
+                        case "1": {
                             System.out.println("Enter the new title");
                             String newTitle = sc.nextLine();
                             s = s.substring(s.indexOf('\n'));
@@ -225,7 +234,7 @@ public class Quiz {
                             df = false;
                             break;
                         }
-                        case 2: {
+                        case "2": {
                             BufferedReader frgt = new BufferedReader(new FileReader(f2));
                             int numLines = -1;
                             String linesCounter = frgt.readLine();
@@ -263,7 +272,15 @@ public class Quiz {
                                         System.out.println("Enter the fourth option");
                                         answerChoices = sc.nextLine();
                                         System.out.println("Enter the answer. The option will be added to the quiz only after the the answer is entered.");
-                                        String answer = sc.nextLine();
+                                        String answer ;
+                                        do {
+                                            answer = sc.nextLine();
+                                            if (answer.equals("A") || answer.equals("B") || answer.equals("C") || answer.equals("D")) {
+                                                break ;
+                                            } else {
+                                                System.out.println("Enter a valid answer.") ;
+                                            }
+                                        } while (true) ;
                                         s += "D) " + answerChoices + '\n';
                                         l += answer.toUpperCase() + "\n";
                                         PrintWriter pw1 = new PrintWriter(new FileWriter(f2), true);
@@ -309,7 +326,15 @@ public class Quiz {
                                         System.out.println("Enter the fourth option");
                                         answerChoices = sc.nextLine();
                                         System.out.println("Enter the answer. The option will be added to the quiz only after the the answer is entered.");
-                                        String answer = sc.nextLine();
+                                        String answer ;
+                                        do {
+                                            answer = sc.nextLine();
+                                            if (answer.equals("A") || answer.equals("B") || answer.equals("C") || answer.equals("D")) {
+                                                break ;
+                                            } else {
+                                                System.out.println("Enter a valid answer.") ;
+                                            }
+                                        } while (true) ;
                                         s += "D) " + answerChoices + '\n';
                                         l += answer.toUpperCase() + "\n";
                                         PrintWriter pw1 = new PrintWriter(new FileWriter(f2), true);
@@ -350,7 +375,15 @@ public class Quiz {
                                         System.out.println("Enter the fourth option");
                                         answerChoices = sc.nextLine();
                                         System.out.println("Enter the answer. The option will be added to the quiz only after the the answer is entered.");
-                                        String answer = sc.nextLine();
+                                        String answer ;
+                                        do {
+                                            answer = sc.nextLine();
+                                            if (answer.equals("A") || answer.equals("B") || answer.equals("C") || answer.equals("D")) {
+                                                break ;
+                                            } else {
+                                                System.out.println("Enter a valid answer.") ;
+                                            }
+                                        } while (true) ;
                                         s += "D) " + answerChoices + '\n';
                                         l += answer.toUpperCase() + "\n";
                                         PrintWriter pw1 = new PrintWriter(new FileWriter(f2), true);
@@ -365,10 +398,26 @@ public class Quiz {
                             df = false;
                             break;
                         }
-                        case 3: {
-                            System.out.println("Enter the question number to be deleted.");
-                            int dqn = sc.nextInt();
-                            sc.nextLine();
+                        case "3": {
+                            BufferedReader bf = new BufferedReader(new FileReader(quizFileName)) ;
+                            String quizLines = bf.readLine() ;
+                            while(quizLines != null) {
+                                System.out.println(quizLines) ;
+                                quizLines = bf.readLine() ;
+                            }
+                            bf.close() ;
+                            int dqn ;
+                            do {
+                                System.out.println("Enter the question number to be deleted.") ;
+                                try {
+                                    dqn = sc.nextInt();
+                                    sc.nextLine() ;
+                                    break ;
+                                } catch (InputMismatchException e) {
+                                    System.out.println("Enter an integer.") ;
+                                    sc.nextLine() ;
+                                }
+                            } while(true) ;
                             String str1 = String.format("%d. ", dqn);
                             String str2 = String.format("%d. ", dqn + 1);
                             if (!s.contains(str1)) {
@@ -432,10 +481,26 @@ public class Quiz {
                             df = false;
                             break;
                         }
-                        case 4: {
-                            System.out.println("Enter the question number of the question to be replaced");
-                            int rqn = sc.nextInt();
-                            sc.nextLine();
+                        case "4": {
+                            BufferedReader bf = new BufferedReader(new FileReader(quizFileName)) ;
+                            String quizLines = bf.readLine() ;
+                            while(quizLines != null) {
+                                System.out.println(quizLines) ;
+                                quizLines = bf.readLine() ;
+                            }
+                            bf.close() ;
+                            int rqn ;
+                            do {
+                                System.out.println("Enter the question number of the question to be replaced");
+                                try {
+                                    rqn = sc.nextInt();
+                                    sc.nextLine() ;
+                                    break ;
+                                } catch (InputMismatchException e) {
+                                    System.out.println("Enter an integer.") ;
+                                    sc.nextLine() ;
+                                }
+                            } while(true) ;
                             String str1 = String.format("%d. ", rqn);
                             String str2 = String.format("%d. ", rqn + 1);
                             if (!(s.contains(str1))) {
@@ -456,7 +521,15 @@ public class Quiz {
                                 System.out.println("Enter the fourth option");
                                 String fourthOption = sc.nextLine();
                                 System.out.println("Enter the answer. The option will be added to the quiz only after the the answer is entered.");
-                                String answer = sc.nextLine();
+                                String answer ;
+                                do {
+                                    answer = sc.nextLine();
+                                    if (answer.equals("A") || answer.equals("B") || answer.equals("C") || answer.equals("D")) {
+                                        break ;
+                                    } else {
+                                        System.out.println("Enter a valid answer.") ;
+                                    }
+                                } while (true) ;
                                 fourthOption = "D) " + fourthOption + "\n";
                                 String str3 = str1 + nqs + "\n" + firstOption + secondOption + thirdOption + fourthOption;
                                 if (!s.contains(str2)) {
@@ -497,7 +570,7 @@ public class Quiz {
                             df = false;
                             break;
                         }
-                        case 5: {
+                        case "5": {
                             df = true;
                             break;
                         }
