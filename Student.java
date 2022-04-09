@@ -1,385 +1,815 @@
 import java.io.*;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
-
+// update the attempt tracker
+// not let to choose any option other than a,b,c,d. number format exception. Teacher constructor. convert all names to UpperCase. what if teacher tries to create a course that already exists. What if teacher tries to create a quiz that already exists. exact questions not randomized.
 public class Student {
-    private String quizFileName;
-    private String quizProgressFileName;
-    private String username;
-    private String password;
-    private String name;
-    //Student object constructor for a student with a quiz in progress
-    public Student(String quizFileName, String quizProgressFileName) {
-        this.quizFileName = quizFileName;
-        this.quizProgressFileName = quizProgressFileName;
-    }
-    public Student(String username, String password, String name){
-        this.username = username;
-        this.password = password;
-        this.name = name;
-    }
-    public void createStudentInFile(Student student) throws FileNotFoundException {
-        File file = new File("studentList.txt");
-        try(PrintWriter pw = new PrintWriter(new FileOutputStream(file, true))){
-            pw.println(student.name+"$$"+student.username+"$$"+student.password);
-        } catch (IOException e){
-            System.out.println("There was an error writing changes to the file!");
+    public void takeQuiz(String studentName , String teacherName , String courseName , int quizNumber , String quizIdentifier) throws IOException {
+        ArrayList<String> arr = new ArrayList<>() ;
+        Scanner sc = new Scanner(System.in) ;
+        File f1 = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$AttemptTracker.txt") ;
+        f1.createNewFile() ;
+        BufferedReader br29 = new BufferedReader(new FileReader(f1)) ;
+        String gl = br29.readLine() ;
+        if (gl == null) {
+            PrintWriter pw90 = new PrintWriter(new FileWriter(f1), true) ;
+            pw90.println("0") ;
         }
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Student login(String username, String name, String password){
-        try {
-            ArrayList<String> students = readFile("studentList.txt");
-            for (int i = 0; i < students.size(); i++) {
-                if (!students.get(i).isBlank()) {
-                    String[] info = students.get(i).split("$");
-                    Student temp = new Student(info[1].trim(), info[2].trim(),info[3].trim());
-                    if (temp.getUsername().equals(username) && temp.getPassword().equals(password)) {
-                        return temp;
-                    }
-                }
-            }
-        } catch (Exception e){
-            System.out.println("There was a problem logging in, try again!");
+        BufferedReader br92 = new BufferedReader(new FileReader(f1)) ;
+        int attemptNumber = Integer.parseInt(br92.readLine()) ;
+        int noOfQuestions = Integer.parseInt(quizIdentifier.substring(quizIdentifier.indexOf('(') + 1 , quizIdentifier.indexOf(')' , quizIdentifier.indexOf('(') + 1))) ;
+        String[][] questionArray = new String[noOfQuestions][6] ;
+        String[][] questionArray1 = new String[noOfQuestions][6] ;
+        String[][] questionArray2 = new String[noOfQuestions][6] ;
+        ArrayList<Integer> optionRandomize = new ArrayList<>() ;
+        for (int i = 1 ; i <= 4 ; i++) {
+            optionRandomize.add(i) ;
         }
-        return null;
-    }
-    public ArrayList<String> readFile(String fileName) {
-        ArrayList<String> tempString = new ArrayList<>();
-        File f = new File(fileName);
-        try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
-            while (true) {
-                String line = bfr.readLine();
-                if (line == null)
-                    break;
-                tempString.add(line);
-            }
-            return tempString;
-        } catch (IOException e) {
-            System.out.println("There was a problem reading from this file!");
-            return null;
+        int[] optionOrder = new int[4] ;
+        for (int i = 1 ; i <= 4 ; i++) {
+            int h = (int)(((Math.random()*((4-i+1)-1+1)+1)) - 1) ;
+            optionOrder[i - 1] = optionRandomize.get(h) ;
+            optionRandomize.remove(h) ;
         }
-    }
-    //Student method for taking the Quiz that is not in progress
-    public void takeQuiz() {
-        //Reads the quizFile
-        Scanner scanner = new Scanner(System.in);
-        File quizFile = new File(quizFileName);
-        ArrayList<String> list = new ArrayList<>();
-        try {
-            //First checks if the quiz is in progress by checking the length of the progress file
-            File quizProgress = new File(quizProgressFileName);
-            quizProgress.createNewFile();
-            FileReader fr = new FileReader(quizProgressFileName);
-            BufferedReader bfr = new BufferedReader(fr);
-            String line = bfr.readLine();
-            ArrayList<String> progressFileLength = new ArrayList<>();
-            boolean inProgress;
-            while (line != null) {
-                progressFileLength.add(line);
-                line = bfr.readLine();
-            }
-            bfr.close();
-            if (progressFileLength.size() <= 1) {
-                inProgress = false;
-            } else {
-                inProgress = true;
-            }
-
-
-            fr = new FileReader(quizFile);
-            bfr = new BufferedReader(fr);
-            line = bfr.readLine();
-            while (line != null) {
-                list.add(line);
-                line = bfr.readLine();
-            }
-            bfr.close();
-
-            //Gets length of quizProgressFile to for later to know what question to start on
-            int progressFileLengthInt = progressFileLength.size(); 
-
-            //If the list is in progress
-            if (inProgress) {
-                //First line of quizFile is quiz name. Gets it to print to student but NOT to write to file
-                String quizName = list.get(0);
-            
-                
-                System.out.println(progressFileLengthInt);
-
-                //Starts output by printing out quiz name and if progress has been made
-                System.out.println(quizName);
-                System.out.println("You have already made progress on this quiz.");
-
-                //Loops through the rest of the file and stores quiz questions and their respective answers into variables
-                //Then prints them out and allows the student to take the test
-                for (int i = progressFileLengthInt; i < list.size(); i++) {
-                    //Gets the substring of the question and stores it into the question variable
-                    String question = list.get(i).substring(4, list.get(i).indexOf("@", 4));
-
-                    //Gets the whole question line and stores it in String l
-                    String l = list.get(i);
-                
-                    //Finds the correct answer and stores it in correctAnswer by looking for the key @AR: @BR: @CR: or @DR: R stands for right, then deletes the R from the substring
-                    String correctAnswer;
-                    if (l.indexOf("@AR:") != -1) {
-                        correctAnswer = "A";
-                        l = l.substring(0, l.indexOf("@AR:") + 2) + l.substring(l.indexOf("@AR:") + 3);
-                    } else if (l.indexOf("@BR:") != -1) {
-                        correctAnswer = "B";
-                        l = l.substring(0, l.indexOf("@BR:") + 2) + l.substring(l.indexOf("@BR:") + 3);
-                    } else if (l.indexOf("@CR:") != -1) {
-                        correctAnswer = "C";
-                        l = l.substring(0, l.indexOf("@CR:") + 2) + l.substring(l.indexOf("@CR:") + 3);
-                    } else {
-                        correctAnswer = "D";
-                        l = l.substring(0, l.indexOf("@DR:") + 2) + l.substring(l.indexOf("@DR:") + 3);
-                    }
-
-                    //Stores the substrings of each answer inside of their respective answerLetter variable
-                    String answerA = l.substring(l.indexOf("@A:") + 3, l.indexOf("@B:"));
-                    String answerB = l.substring(l.indexOf("@B:") + 3, l.indexOf("@C:"));
-                    String answerC = l.substring(l.indexOf("@C:") + 3, l.indexOf("@D:"));
-                    String answerD = l.substring(l.indexOf("@D:") + 3);
-
-                    //Finds the String of the correct answer for writing later
-                    String answerCorrect;
-                    if (correctAnswer.equals("A")) {
-                        answerCorrect = answerA;
-                    } else if (correctAnswer.equals("B")) {
-                        answerCorrect = answerB;
-                    } else if (correctAnswer.equals("C")) {
-                        answerCorrect = answerC;
-                    } else {
-                        answerCorrect = answerD;
-                    }
-
-                    //Prints out question number, the question, and answers
-                    System.out.println("Question number: " + i);
-                    System.out.println(question);
-                    System.out.println("A: " + answerA);
-                    System.out.println("B: " + answerB);
-                    System.out.println("C: " + answerC);
-                    System.out.println("D: " + answerD);
-
-                    //Asks user if they would like to answer by entering a number or a file and checks to see if the input is valid
-                    int choice = 0;
-                    do {
-                        System.out.println("Would you like to answer normally or by attaching a file?");
-                        System.out.println("1: Normally");
-                        System.out.println("2: File");
-                        String response = scanner.nextLine();
-                        if (response.equals("1")) {
-                            choice = 1;
-                        } else if (response.equals("2")) {
-                            choice = 2;
+        BufferedReader br56 = new BufferedReader((new FileReader(teacherName + "$$" + courseName + "$$" + quizNumber + ".txt"))) ;
+        String copier = br56.readLine() ;
+        BufferedReader br57 = new BufferedReader((new FileReader(teacherName + "$$" + courseName + "$$" + quizNumber + "$$Answers.txt"))) ;
+        String answerCopier ;
+        String quizTitle = "" ;
+        if (copier == null) {
+            System.out.println("This quiz is currently empty. Cannot be attempted") ;
+        } else {
+            int counter = -1 ;
+            while(copier != null) {
+                if (!(copier.equals("") || copier.equals(" "))) {
+                    counter++;
+                    if (!(counter == 0)) {
+                        if (counter % 6 != 0) {
+                            String addition = copier.substring(copier.indexOf(" ") + 1);
+                            questionArray[counter / 6][(counter % 6) - 1] = addition;
                         } else {
-                            choice = 0;
-                            System.out.println("Incorrect file format!");
+                            answerCopier = br57.readLine();
+                            questionArray[(counter / 6) - 1][5] = answerCopier;
                         }
-                    } while(choice != 1 && choice != 2);
-
-                    //If choice is normal, prompts user to enter A, B, C, or D as a String and stores in variable answerChoice
-                    //If choice is file, asks the user for the fileName and reads the first letter of the file. If it is A, B, C, or D, stores answer in variable answerChoice
-                    //Both choices are doWhile loops that wont end until a valid input is recieved
-                    String answerChoice;
-                    if (choice == 1) {
-                        do {
-                            System.out.println("Enter either A, B, C, or D: ");
-                            answerChoice = scanner.nextLine().toUpperCase();
-                            if (!answerChoice.equals("A") && !answerChoice.equals("B") && !answerChoice.equals("C") && !answerChoice.equals("D")) {
-                                System.out.println("You must enter your answer in the correct format!");
-                            }
-                        } while(!answerChoice.equals("A") && !answerChoice.equals("B") && !answerChoice.equals("C") && !answerChoice.equals("D")); 
                     } else {
-                        do {
-                            ArrayList<String> listAns = new ArrayList<>();
-                            System.out.println("Enter file name with the letter of your answer at the front of the first line:");
-                            String fileInput = scanner.nextLine();
-                            File answerFile = new File(fileInput);
-                            answerFile.createNewFile();
-                            FileReader frAns = new FileReader(fileInput);
-                            BufferedReader bfrAns = new BufferedReader(frAns);
-                            String lineAns = bfrAns.readLine();
-                            while (lineAns != null) {
-                                listAns.add(lineAns);
-                                lineAns = bfrAns.readLine();
-                            }
-                            bfrAns.close();
-                            if (listAns.size() == 0) {
-                                answerChoice = "Z";
-                            } else {
-                                answerChoice = listAns.get(0).substring(0, 1).toUpperCase();
-                            }
-                            if (!answerChoice.equals("A") && !answerChoice.equals("B") && !answerChoice.equals("C") && !answerChoice.equals("D")) {
-                                System.out.println("Either your file does not exist or it is in the wrong format!");
-                            }
-                        } while(!answerChoice.equals("A") && !answerChoice.equals("B") && !answerChoice.equals("C") && !answerChoice.equals("D")); 
+                        quizTitle = copier;
                     }
-
-                    //Writes to quizProgress file in append mode
-                    FileOutputStream fos = new FileOutputStream(quizProgressFileName, true);
-                    PrintWriter pw = new PrintWriter(fos);
-                    pw.println(list.get(i).substring(0, 4) + question + "@Choice:" + answerChoice + "@" + answerCorrect);
-                    pw.close();    
                 }
-            } else {
-                //First line of quizFile is quiz name. Gets it and writes quiz name to progressFile
-                String quizName = list.get(0);
-                if (progressFileLengthInt == 0) {
-                    FileOutputStream fos = new FileOutputStream(quizProgressFileName, true);
-                    PrintWriter pw = new PrintWriter(fos);
-                    pw.println(quizName);
-                    pw.close();
-                }
-                
-
-                //Starts output by printing out quiz name
-                System.out.println(quizName);
-
-                //Loops through the rest of the file and stores quiz questions and their respective answers into variables
-                //Then prints them out and allows the student to take the test
-                for (int i = 1; i < list.size(); i++) {
-                    //Gets the substring of the question and stores it into the question variable
-                    String question = list.get(i).substring(4, list.get(i).indexOf("@", 4));
-
-                    //Gets the whole question line and stores it in String l
-                    String l = list.get(i);
-                
-                    //Finds the correct answer and stores it in correctAnswer by looking for the key @AR: @BR: @CR: or @DR: R stands for right, then deletes the R from the substring
-                    String correctAnswer;
-                    if (l.indexOf("@AR:") != -1) {
-                        correctAnswer = "A";
-                        l = l.substring(0, l.indexOf("@AR:") + 2) + l.substring(l.indexOf("@AR:") + 3);
-                    } else if (l.indexOf("@BR:") != -1) {
-                        correctAnswer = "B";
-                        l = l.substring(0, l.indexOf("@BR:") + 2) + l.substring(l.indexOf("@BR:") + 3);
-                    } else if (l.indexOf("@CR:") != -1) {
-                        correctAnswer = "C";
-                        l = l.substring(0, l.indexOf("@CR:") + 2) + l.substring(l.indexOf("@CR:") + 3);
-                    } else {
-                        correctAnswer = "D";
-                        l = l.substring(0, l.indexOf("@DR:") + 2) + l.substring(l.indexOf("@DR:") + 3);
-                    }
-
-                    //Stores the substrings of each answer inside of their respective answerLetter variable
-                    String answerA = l.substring(l.indexOf("@A:") + 3, l.indexOf("@B:"));
-                    String answerB = l.substring(l.indexOf("@B:") + 3, l.indexOf("@C:"));
-                    String answerC = l.substring(l.indexOf("@C:") + 3, l.indexOf("@D:"));
-                    String answerD = l.substring(l.indexOf("@D:") + 3);
-
-                    //Finds the String of the correct answer for writing later
-                    String answerCorrect;
-                    if (correctAnswer.equals("A")) {
-                        answerCorrect = answerA;
-                    } else if (correctAnswer.equals("B")) {
-                        answerCorrect = answerB;
-                    } else if (correctAnswer.equals("C")) {
-                        answerCorrect = answerC;
-                    } else {
-                        answerCorrect = answerD;
-                    }
-
-                    //Prints out question and answers
-                    System.out.println("Question number: " + i);
-                    System.out.println(question);
-                    System.out.println("A: " + answerA);
-                    System.out.println("B: " + answerB);
-                    System.out.println("C: " + answerC);
-                    System.out.println("D: " + answerD);
-
-                    //Asks user if they would like to answer by entering a number or a file and checks to see if the input is valid
-                    int choice = 0;
-                    do {
-                        System.out.println("Would you like to answer normally or by attaching a file?");
-                        System.out.println("1: Normally");
-                        System.out.println("2: File");
-                        String response = scanner.nextLine();
-                        if (response.equals("1")) {
-                            choice = 1;
-                        } else if (response.equals("2")) {
-                            choice = 2;
-                        } else {
-                            choice = 0;
-                            System.out.println("Incorrect file format!");
-                        }
-                    } while(choice != 1 && choice != 2);
-
-                    //If choice is normal, prompts user to enter A, B, C, or D as a String and stores in variable answerChoice
-                    //If choice is file, asks the user for the fileName and reads the first letter of the file. If it is A, B, C, or D, stores answer in variable answerChoice
-                    //Both choices are doWhile loops that wont end until a valid input is recieved
-                    String answerChoice;
-                    if (choice == 1) {
-                        do {
-                            System.out.println("Enter either A, B, C, or D: ");
-                            answerChoice = scanner.nextLine().toUpperCase();
-                            if (!answerChoice.equals("A") && !answerChoice.equals("B") && !answerChoice.equals("C") && !answerChoice.equals("D")) {
-                                System.out.println("You must enter your answer in the correct format!");
-                            }
-                        } while(!answerChoice.equals("A") && !answerChoice.equals("B") && !answerChoice.equals("C") && !answerChoice.equals("D")); 
-                    } else {
-                        do {
-                            ArrayList<String> listAns = new ArrayList<>();
-                            System.out.println("Enter file name with the letter of your answer at the front of the first line:");
-                            String fileInput = scanner.nextLine();
-                            File answerFile = new File(fileInput);
-                            answerFile.createNewFile();
-                            FileReader frAns = new FileReader(answerFile);
-                            BufferedReader bfrAns = new BufferedReader(frAns);
-                            String lineAns = bfrAns.readLine();
-                            while (lineAns != null) {
-                                listAns.add(lineAns);
-                                lineAns = bfrAns.readLine();
-                            }
-                            bfrAns.close();
-                            System.out.println(listAns.size());
-                            if (listAns.size() == 0) {
-                                answerChoice = "Z";
-                            } else {
-                                answerChoice = listAns.get(0).substring(0, 1).toUpperCase();
-                            }
-                            if (!answerChoice.equals("A") && !answerChoice.equals("B") && !answerChoice.equals("C") && !answerChoice.equals("D")) {
-                                System.out.println("Either your file does not exist or it is in the wrong format!");
-                            }
-                        } while(!answerChoice.equals("A") && !answerChoice.equals("B") && !answerChoice.equals("C") && !answerChoice.equals("D")); 
-                    }
-
-                    //Writes to quizProgress file in append mode
-                    FileOutputStream fos = new FileOutputStream(quizProgressFileName, true);
-                    PrintWriter pw = new PrintWriter(fos);
-                    pw.println(list.get(i).substring(0, 4) + question + "@Choice:" + answerChoice + "@" + answerCorrect);
-                    pw.close();    
+                if (!(counter % 6 == 5)) {
+                    copier = br56.readLine() ;
                 }
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            //System.out.println("File not found!");
-        } catch (IOException e) {
-            e.printStackTrace();
+            for (int k = 0 ; k < noOfQuestions ; k++) {
+                for (int g = 0 ; g < 6 ; g++) {
+                    if (g == 0) {
+                        questionArray1[k][g] = questionArray[k][g] ;
+                    } else{
+                        if (g == 5) {
+                            int no ;
+                            if (questionArray[k][g].equals("A")) {
+                                no = 1 ;
+                            } else if (questionArray[k][g].equals("B")) {
+                                no = 2 ;
+                            } else if (questionArray[k][g].equals("C")) {
+                                no = 3 ;
+                            } else {
+                                no = 4 ;
+                            }
+                            int newIndex = 0 ;
+                            for (int l = 0 ; l < 4 ; l++) {
+                                if (optionOrder[l] == no) {
+                                    newIndex = l + 1 ;
+                                }
+                            }
+                            if (newIndex == 1) {
+                                questionArray1[k][g] = "A" ;
+                            } else if (newIndex == 2) {
+                                questionArray1[k][g] = "B" ;
+                            } else if (newIndex == 3) {
+                                questionArray1[k][g] = "C" ;
+                            } else {
+                                questionArray1[k][g] = "D" ;
+                            }
+                        } else {
+                            questionArray1[k][g] = questionArray[k][optionOrder[g - 1]] ;
+                        }
+                    }
+                }
+            }
+            if (quizIdentifier.contains("MCQ")) {
+                if (quizIdentifier.contains("true")) {
+                    if (quizIdentifier.contains("pool")) {
+                        File f457 = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "formQuiz.txt") ;
+                        f457.createNewFile() ;
+                        ArrayList<Integer> questionRandomize = new ArrayList<>() ;
+                        for (int i = 1 ; i <= noOfQuestions ; i++) {
+                            questionRandomize.add(i) ;
+                        }
+                        int[] questionOrder = new int[5] ;
+                        for (int i = 1 ; i <= 5 ; i++) {
+                            int h = (int)(((Math.random()*((noOfQuestions - i+1)-1+1)+1)) - 1) ;
+                            questionOrder[i - 1] = questionRandomize.get(h) ;
+                            questionRandomize.remove(h) ;
+                        }
+                        BufferedReader read = new BufferedReader(new FileReader(f457)) ;
+                        PrintWriter pw98 = new PrintWriter(new FileWriter(f457), true) ;
+                        pw98.println(quizTitle) ;
+                        File f468 = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "Solutions.txt") ;
+                        f468.createNewFile() ;
+                        BufferedReader read468 = new BufferedReader(new FileReader(f468)) ;
+                        PrintWriter pw468 = new PrintWriter(new FileWriter(f468), true) ;
+                        for (int y = 0 ; y < questionOrder.length ; y++) {
+                            String inLine = "" ;
+                            for (int lp = 0 ; lp < 6 ; lp++) {
+                                if (lp % 6 == 0) {
+                                    inLine += Integer.toString(y + 1) + ". " + questionArray1[questionOrder[y] - 1][0] + "@" ;
+                                }  else if (lp % 6 == 5) {
+                                    pw468.println(Integer.toString(y + 1) + ". " + questionArray1[questionOrder[y] - 1][5]) ;
+                                } else {
+                                    if (lp == 1) {
+                                        inLine += "A) " + questionArray1[questionOrder[y] - 1][lp] + "@" ;
+                                    } else if (lp == 2) {
+                                        inLine += "B) " + questionArray1[questionOrder[y] - 1][lp] + "@" ;
+                                    } else if (lp== 3) {
+                                        inLine += "C) " + questionArray1[questionOrder[y] - 1][lp] + "@" ;
+                                    } else {
+                                        inLine += "D) " + questionArray1[questionOrder[y] - 1][lp] + "@" ;
+                                    }
+                                }
+                            }
+                            pw98.println(inLine) ;
+                        }
+                        File ft = new File(studentName + "$$processQuiz.txt") ;
+                        ft.createNewFile() ;
+                        BufferedReader readft = new BufferedReader(new FileReader(ft)) ;
+                        PrintWriter pwft = new PrintWriter(new FileWriter(ft), true) ;
+                        pwft.println(String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d" , teacherName, courseName, quizNumber, attemptNumber + 1, 1)) ;
+                        pwft.println(quizTitle) ;
+                        File sft = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "$$submission.txt") ;
+                        sft.createNewFile() ;
+                        File studentAnswersOnly = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "$$submittedAnswers.txt") ;
+                        studentAnswersOnly.createNewFile() ;
+                        BufferedReader readStudentAnswersOnly = new BufferedReader(new FileReader(studentAnswersOnly)) ;
+                        PrintWriter pwStudentAnswersOnly = new PrintWriter(new FileWriter(studentAnswersOnly), true) ;
+                        BufferedReader readsft = new BufferedReader(new FileReader(sft)) ;
+                        PrintWriter pwsft = new PrintWriter(new FileWriter(sft), true) ;
+                        pwsft.println(quizTitle) ;
+                        String quizStarting = read.readLine() ;
+                        int counterAgain = 0 ;
+                        while (quizStarting != null) {
+                            counterAgain++ ;
+                            if (counterAgain == 1) {
+                                System.out.println(quizStarting) ;
+                            } else {
+                                System.out.print(quizStarting.replaceAll("@" , "\n")) ;
+                                int choic ;
+                                do {
+                                    System.out.println("1. Enter the response\n2. attach a file with the response") ;
+                                    choic = sc.nextInt() ;
+                                    sc.nextLine() ;
+                                    if (choic == 1 || choic == 2) {
+                                        break ;
+                                    } else {
+                                        System.out.println("invalid response") ;
+                                    }
+                                } while (true) ;
+                                do {
+                                    if (choic == 2) {
+                                        System.out.println("Enter the file path") ;
+                                        String responseFilePath = sc.nextLine() ;
+                                        File fresponse = new File(responseFilePath) ;
+                                        if (fresponse.length() == 0) {
+                                            System.out.println("The file does not exist or is empty. Please enter a valid file path") ;
+                                        } else {
+                                            BufferedReader re = new BufferedReader(new FileReader(fresponse)) ;
+                                            String answer = re.readLine() ;
+                                            pwStudentAnswersOnly.println(answer) ;
+                                            BufferedReader bread = new BufferedReader(new FileReader(ft)) ;
+                                            String readings = bread.readLine() ;
+                                            String appendingString = "" ;
+                                            int cf = 0 ;
+                                            while(readings != null) {
+                                                cf++ ;
+                                                if (cf == 1) {
+                                                    appendingString += String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d" , teacherName, courseName, quizNumber, attemptNumber + 1, counterAgain) + "\n" ;
+
+                                                } else {
+                                                    appendingString += readings + "\n" ;
+                                                }
+                                                readings = bread.readLine() ;
+                                            }
+                                            appendingString += quizStarting.replaceAll("@" , "\n") ;
+                                            appendingString += answer + "\n" ;
+                                            PrintWriter pw35 = new PrintWriter(new FileWriter(ft), true) ;
+                                            pw35.println(appendingString) ;
+                                            pwsft.print(quizStarting.replaceAll("@" , "\n")) ;
+                                            pwsft.print(answer + "\n") ;
+                                            pwsft.flush() ;
+                                            break ;
+                                        }
+                                    } else {
+                                        System.out.println("Enter the answer") ;
+                                        String answer = sc.nextLine() ;
+                                        pwStudentAnswersOnly.println(answer) ;
+                                        BufferedReader bread = new BufferedReader(new FileReader(ft)) ;
+                                        String readings = bread.readLine() ;
+                                        String appendingString = "" ;
+                                        int cf = 0 ;
+                                        while(readings != null) {
+                                            cf++ ;
+                                            if (cf == 1) {
+                                                appendingString += String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d" , teacherName, courseName, quizNumber, attemptNumber + 1, counterAgain) + "\n" ;
+                                            } else {
+                                                appendingString += readings + "\n" ;
+                                            }
+                                            readings = bread.readLine() ;
+                                        }
+                                        appendingString += quizStarting.replaceAll("@" , "\n") ;
+                                        appendingString += answer + "\n" ;
+                                        PrintWriter pw35 = new PrintWriter(new FileWriter(ft), true) ;
+                                        pw35.println(appendingString) ;
+                                        pwsft.print(quizStarting.replaceAll("@" , "\n")) ;
+                                        pwsft.print(answer + "\n") ;
+                                        pwsft.flush() ;
+                                        break ;
+                                    }
+                                } while (true) ;
+                            }
+                            quizStarting = read.readLine() ;
+                        }
+                        PrintWriter bread789 = new PrintWriter(new FileWriter(ft), true) ;
+                        bread789.println("") ;
+                        Date date = new Date();
+                        Timestamp ts = new Timestamp(date.getTime());
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        pwsft.println(formatter.format(ts)) ;
+                        System.out.println("This quiz is over and is being submitted") ;
+                        File quizGradingReport = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "$$gradingReport.txt") ;
+                        quizGradingReport.createNewFile() ;
+                        BufferedReader brGrading = new BufferedReader(new FileReader(quizGradingReport)) ;
+                        PrintWriter pwGrading = new PrintWriter(new FileWriter(quizGradingReport), true) ;
+                        //File rt = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "Solutions.txt") ;
+                        BufferedReader brGradingFrom = new BufferedReader(new FileReader(f468)) ;
+                        BufferedReader brGraded = new BufferedReader(new FileReader(studentAnswersOnly)) ;
+                        String checked = brGraded.readLine() ;
+                        String checker = brGradingFrom.readLine() ;
+                        int d = 0 ;
+                        int totalPoints = 0 ;
+                        while(checked != null) {
+                            d++ ;
+                            if (checked.equals(checker.substring(checker.indexOf(" ") + 1))) {
+                                pwGrading.println(String.format("Question %d - correct - %d points", d, 2)) ;
+                                totalPoints += 2 ;
+                            } else {
+                                pwGrading.println(String.format("Question %d - wrong - %d points", d, 0)) ;
+                            }
+                            checked = brGraded.readLine() ;
+                            checker = brGradingFrom.readLine() ;
+                        }
+                        pwStudentAnswersOnly.println(formatter.format(ts)) ;
+                        pwGrading.println("total points - " + totalPoints) ;
+                        PrintWriter pw901 = new PrintWriter(new FileWriter(f1), true) ;
+                        System.out.println(attemptNumber) ;
+                        pw901.println(Integer.toString(attemptNumber + 1)) ;
+                        pw901.flush() ;
+                    } else {
+                        File f457 = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "formQuiz.txt") ;
+                        f457.createNewFile() ;
+                        ArrayList<Integer> questionRandomize = new ArrayList<>() ;
+                        for (int i = 1 ; i <= noOfQuestions ; i++) {
+                            questionRandomize.add(i) ;
+                        }
+                        int[] questionOrder = new int[noOfQuestions] ;
+                        for (int i = 1 ; i <= noOfQuestions ; i++) {
+                            int h = (int)(((Math.random()*((noOfQuestions - i+1)-1+1)+1)) - 1) ;
+                            questionOrder[i - 1] = questionRandomize.get(h) ;
+                            questionRandomize.remove(h) ;
+                        }
+                        BufferedReader read = new BufferedReader(new FileReader(f457)) ;
+                        PrintWriter pw98 = new PrintWriter(new FileWriter(f457), true) ;
+                        pw98.println(quizTitle) ;
+                        File f468 = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "Solutions.txt") ;
+                        f468.createNewFile() ;
+                        BufferedReader read468 = new BufferedReader(new FileReader(f468)) ;
+                        PrintWriter pw468 = new PrintWriter(new FileWriter(f468), true) ;
+                        for (int y = 0 ; y < questionOrder.length ; y++) {
+                            String inLine = "" ;
+                            for (int lp = 0 ; lp < 6 ; lp++) {
+                                if (lp % 6 == 0) {
+                                    inLine += Integer.toString(y + 1) + ". " + questionArray1[questionOrder[y] - 1][0] + "@" ;
+                                }  else if (lp % 6 == 5) {
+                                    pw468.println(Integer.toString(y + 1) + ". " + questionArray1[questionOrder[y] - 1][5]) ;
+                                } else {
+                                    if (lp == 1) {
+                                        inLine += "A) " + questionArray1[questionOrder[y] - 1][lp] + "@" ;
+                                    } else if (lp == 2) {
+                                        inLine += "B) " + questionArray1[questionOrder[y] - 1][lp] + "@" ;
+                                    } else if (lp== 3) {
+                                        inLine += "C) " + questionArray1[questionOrder[y] - 1][lp] + "@" ;
+                                    } else {
+                                        inLine += "D) " + questionArray1[questionOrder[y] - 1][lp] + "@" ;
+                                    }
+                                }
+                            }
+                            pw98.println(inLine) ;
+                        }
+                        File ft = new File(studentName + "$$processQuiz.txt") ;
+                        ft.createNewFile() ;
+                        BufferedReader readft = new BufferedReader(new FileReader(ft)) ;
+                        PrintWriter pwft = new PrintWriter(new FileWriter(ft), true) ;
+                        pwft.println(String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d" , teacherName, courseName, quizNumber, attemptNumber + 1, 1)) ;
+                        pwft.println(quizTitle) ;
+                        File sft = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "$$submission.txt") ;
+                        sft.createNewFile() ;
+                        File studentAnswersOnly = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "$$submittedAnswers.txt") ;
+                        studentAnswersOnly.createNewFile() ;
+                        BufferedReader readStudentAnswersOnly = new BufferedReader(new FileReader(studentAnswersOnly)) ;
+                        PrintWriter pwStudentAnswersOnly = new PrintWriter(new FileWriter(studentAnswersOnly), true) ;
+                        BufferedReader readsft = new BufferedReader(new FileReader(sft)) ;
+                        PrintWriter pwsft = new PrintWriter(new FileWriter(sft), true) ;
+                        pwsft.println(quizTitle) ;
+                        String quizStarting = read.readLine() ;
+                        int counterAgain = 0 ;
+                        while (quizStarting != null) {
+                            counterAgain++ ;
+                            if (counterAgain == 1) {
+                                System.out.println(quizStarting) ;
+                            } else {
+                                System.out.print(quizStarting.replaceAll("@" , "\n")) ;
+                                int choic ;
+                                do {
+                                    System.out.println("1. Enter the response\n2. attach a file with the response") ;
+                                    choic = sc.nextInt() ;
+                                    sc.nextLine() ;
+                                    if (choic == 1 || choic == 2) {
+                                        break ;
+                                    } else {
+                                        System.out.println("invalid response") ;
+                                    }
+                                } while (true) ;
+                                do {
+                                    if (choic == 2) {
+                                        System.out.println("Enter the file path") ;
+                                        String responseFilePath = sc.nextLine() ;
+                                        File fresponse = new File(responseFilePath) ;
+                                        System.out.println(fresponse.createNewFile()) ;
+                                        BufferedReader mz = new BufferedReader(new FileReader(fresponse)) ;
+                                        String temp = mz.readLine() ;
+                                        System.out.println(temp) ;
+                                        if (fresponse.createNewFile() || temp == null) {
+                                            System.out.println("The file does not exist or is empty. Please enter a valid file path") ;
+                                        } else {
+                                            BufferedReader re = new BufferedReader(new FileReader(fresponse)) ;
+                                            String answer = re.readLine() ;
+                                            pwStudentAnswersOnly.println(answer) ;
+                                            BufferedReader bread = new BufferedReader(new FileReader(ft)) ;
+                                            String readings = bread.readLine() ;
+                                            String appendingString = "" ;
+                                            int cf = 0 ;
+                                            while(readings != null) {
+                                                cf++ ;
+                                                if (cf == 1) {
+                                                    appendingString += String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d" , teacherName, courseName, quizNumber, attemptNumber + 1, counterAgain) + "\n" ;
+
+                                                } else {
+                                                    appendingString += readings + "\n" ;
+                                                }
+                                                readings = bread.readLine() ;
+                                            }
+                                            appendingString += quizStarting.replaceAll("@" , "\n") ;
+                                            appendingString += answer + "\n" ;
+                                            PrintWriter pw35 = new PrintWriter(new FileWriter(ft), true) ;
+                                            pw35.println(appendingString) ;
+                                            pwsft.print(quizStarting.replaceAll("@" , "\n")) ;
+                                            pwsft.print(answer + "\n") ;
+                                            pwsft.flush() ;
+                                            break ;
+                                        }
+                                    } else {
+                                        System.out.println("Enter the answer") ;
+                                        String answer = sc.nextLine() ;
+                                        pwStudentAnswersOnly.println(answer) ;
+                                        BufferedReader bread = new BufferedReader(new FileReader(ft)) ;
+                                        String readings = bread.readLine() ;
+                                        String appendingString = "" ;
+                                        int cf = 0 ;
+                                        while(readings != null) {
+                                            cf++ ;
+                                            if (cf == 1) {
+                                                appendingString += String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d" , teacherName, courseName, quizNumber, attemptNumber + 1, counterAgain) + "\n" ;
+                                            } else {
+                                                appendingString += readings + "\n" ;
+                                            }
+                                            readings = bread.readLine() ;
+                                        }
+                                        appendingString += quizStarting.replaceAll("@" , "\n") ;
+                                        appendingString += answer + "\n" ;
+                                        PrintWriter pw35 = new PrintWriter(new FileWriter(ft), true) ;
+                                        pw35.println(appendingString) ;
+                                        pwsft.print(quizStarting.replaceAll("@" , "\n")) ;
+                                        pwsft.print(answer + "\n") ;
+                                        pwsft.flush() ;
+                                        break ;
+                                    }
+                                } while (true) ;
+                            }
+                            quizStarting = read.readLine() ;
+                        }
+                        PrintWriter bread789 = new PrintWriter(new FileWriter(ft), true) ;
+                        bread789.println("") ;
+                        Date date = new Date();
+                        Timestamp ts = new Timestamp(date.getTime());
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        pwsft.println(formatter.format(ts)) ;
+                        System.out.println("This quiz is over and is being submitted") ;
+                        File quizGradingReport = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "$$gradingReport.txt") ;
+                        quizGradingReport.createNewFile() ;
+                        BufferedReader brGrading = new BufferedReader(new FileReader(quizGradingReport)) ;
+                        PrintWriter pwGrading = new PrintWriter(new FileWriter(quizGradingReport), true) ;
+                        //File rt = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "Solutions.txt") ;
+                        BufferedReader brGradingFrom = new BufferedReader(new FileReader(f468)) ;
+                        BufferedReader brGraded = new BufferedReader(new FileReader(studentAnswersOnly)) ;
+                        String checked = brGraded.readLine() ;
+                        String checker = brGradingFrom.readLine() ;
+                        int d = 0 ;
+                        int totalPoints = 0 ;
+                        while(checked != null) {
+                            d++ ;
+                            if (checked.equals(checker.substring(checker.indexOf(" ") + 1))) {
+                                pwGrading.println(String.format("Question %d - correct - %d points", d, 2)) ;
+                                totalPoints += 2 ;
+                            } else {
+                                pwGrading.println(String.format("Question %d - wrong - %d points", d, 0)) ;
+                            }
+                            checked = brGraded.readLine() ;
+                            checker = brGradingFrom.readLine() ;
+                        }
+                        pwStudentAnswersOnly.println(formatter.format(ts)) ;
+                        pwGrading.println("total points - " + totalPoints) ;
+                        PrintWriter pw901 = new PrintWriter(new FileWriter(f1), true) ;
+                        System.out.println(attemptNumber) ;
+                        pw901.println(Integer.toString(attemptNumber + 1)) ;
+                        pw901.flush() ;
+                    }
+                } else {
+                    if (quizIdentifier.contains("pool")) {
+                        File f457 = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "formQuiz.txt") ;
+                        f457.createNewFile() ;
+                        ArrayList<Integer> questionRandomize = new ArrayList<>() ;
+                        for (int i = 1 ; i <= noOfQuestions ; i++) {
+                            questionRandomize.add(i) ;
+                        }
+                        int[] questionOrder = new int[5] ;
+                        for (int i = 1 ; i <= 5 ; i++) {
+                            int h = (int)(((Math.random()*((noOfQuestions - i+1)-1+1)+1)) - 1) ;
+                            questionOrder[i - 1] = questionRandomize.get(h) ;
+                            questionRandomize.remove(h) ;
+                        }
+                        BufferedReader read = new BufferedReader(new FileReader(f457)) ;
+                        PrintWriter pw98 = new PrintWriter(new FileWriter(f457), true) ;
+                        pw98.println(quizTitle) ;
+                        File f468 = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "Solutions.txt") ;
+                        f468.createNewFile() ;
+                        BufferedReader read468 = new BufferedReader(new FileReader(f468)) ;
+                        PrintWriter pw468 = new PrintWriter(new FileWriter(f468), true) ;
+                        for (int y = 0 ; y < questionOrder.length ; y++) {
+                            String inLine = "" ;
+                            for (int lp = 0 ; lp < 6 ; lp++) {
+                                if (lp % 6 == 0) {
+                                    inLine += Integer.toString(y + 1) + ". " + questionArray1[questionOrder[y] - 1][0] + "@" ;
+                                }  else if (lp % 6 == 5) {
+                                    pw468.println(Integer.toString(y + 1) + ". " + questionArray1[questionOrder[y] - 1][5]) ;
+                                } else {
+                                    if (lp == 1) {
+                                        inLine += "A) " + questionArray1[questionOrder[y] - 1][lp] + "@" ;
+                                    } else if (lp == 2) {
+                                        inLine += "B) " + questionArray1[questionOrder[y] - 1][lp] + "@" ;
+                                    } else if (lp== 3) {
+                                        inLine += "C) " + questionArray1[questionOrder[y] - 1][lp] + "@" ;
+                                    } else {
+                                        inLine += "D) " + questionArray1[questionOrder[y] - 1][lp] + "@" ;
+                                    }
+                                }
+                            }
+                            pw98.println(inLine) ;
+                        }
+                        File ft = new File(studentName + "$$processQuiz.txt") ;
+                        ft.createNewFile() ;
+                        BufferedReader readft = new BufferedReader(new FileReader(ft)) ;
+                        PrintWriter pwft = new PrintWriter(new FileWriter(ft), true) ;
+                        pwft.println(String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d" , teacherName, courseName, quizNumber, attemptNumber + 1, 1)) ;
+                        pwft.println(quizTitle) ;
+                        File sft = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "$$submission.txt") ;
+                        sft.createNewFile() ;
+                        File studentAnswersOnly = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "$$submittedAnswers.txt") ;
+                        studentAnswersOnly.createNewFile() ;
+                        BufferedReader readStudentAnswersOnly = new BufferedReader(new FileReader(studentAnswersOnly)) ;
+                        PrintWriter pwStudentAnswersOnly = new PrintWriter(new FileWriter(studentAnswersOnly), true) ;
+                        BufferedReader readsft = new BufferedReader(new FileReader(sft)) ;
+                        PrintWriter pwsft = new PrintWriter(new FileWriter(sft), true) ;
+                        pwsft.println(quizTitle) ;
+                        String quizStarting = read.readLine() ;
+                        int counterAgain = 0 ;
+                        while (quizStarting != null) {
+                            counterAgain++ ;
+                            if (counterAgain == 1) {
+                                System.out.println(quizStarting) ;
+                            } else {
+                                System.out.print(quizStarting.replaceAll("@" , "\n")) ;
+                                int choic ;
+                                do {
+                                    System.out.println("1. Enter the response\n2. attach a file with the response") ;
+                                    choic = sc.nextInt() ;
+                                    sc.nextLine() ;
+                                    if (choic == 1 || choic == 2) {
+                                        break ;
+                                    } else {
+                                        System.out.println("invalid response") ;
+                                    }
+                                } while (true) ;
+                                do {
+                                    if (choic == 2) {
+                                        System.out.println("Enter the file path") ;
+                                        String responseFilePath = sc.nextLine() ;
+                                        File fresponse = new File(responseFilePath) ;
+                                        if (fresponse.length() == 0) {
+                                            System.out.println("The file does not exist or is empty. Please enter a valid file path") ;
+                                        } else {
+                                            BufferedReader re = new BufferedReader(new FileReader(fresponse)) ;
+                                            String answer = re.readLine() ;
+                                            pwStudentAnswersOnly.println(answer) ;
+                                            BufferedReader bread = new BufferedReader(new FileReader(ft)) ;
+                                            String readings = bread.readLine() ;
+                                            String appendingString = "" ;
+                                            int cf = 0 ;
+                                            while(readings != null) {
+                                                cf++ ;
+                                                if (cf == 1) {
+                                                    appendingString += String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d" , teacherName, courseName, quizNumber, attemptNumber + 1, counterAgain) + "\n" ;
+
+                                                } else {
+                                                    appendingString += readings + "\n" ;
+                                                }
+                                                readings = bread.readLine() ;
+                                            }
+                                            appendingString += quizStarting.replaceAll("@" , "\n") ;
+                                            appendingString += answer + "\n" ;
+                                            PrintWriter pw35 = new PrintWriter(new FileWriter(ft), true) ;
+                                            pw35.println(appendingString) ;
+                                            pwsft.print(quizStarting.replaceAll("@" , "\n")) ;
+                                            pwsft.print(answer + "\n") ;
+                                            pwsft.flush() ;
+                                            break ;
+                                        }
+                                    } else {
+                                        System.out.println("Enter the answer") ;
+                                        String answer = sc.nextLine() ;
+                                        pwStudentAnswersOnly.println(answer) ;
+                                        BufferedReader bread = new BufferedReader(new FileReader(ft)) ;
+                                        String readings = bread.readLine() ;
+                                        String appendingString = "" ;
+                                        int cf = 0 ;
+                                        while(readings != null) {
+                                            cf++ ;
+                                            if (cf == 1) {
+                                                appendingString += String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d" , teacherName, courseName, quizNumber, attemptNumber + 1, counterAgain) + "\n" ;
+                                            } else {
+                                                appendingString += readings + "\n" ;
+                                            }
+                                            readings = bread.readLine() ;
+                                        }
+                                        appendingString += quizStarting.replaceAll("@" , "\n") ;
+                                        appendingString += answer + "\n" ;
+                                        PrintWriter pw35 = new PrintWriter(new FileWriter(ft), true) ;
+                                        pw35.println(appendingString) ;
+                                        pwsft.print(quizStarting.replaceAll("@" , "\n")) ;
+                                        pwsft.print(answer + "\n") ;
+                                        pwsft.flush() ;
+                                        break ;
+                                    }
+                                } while (true) ;
+                            }
+                            quizStarting = read.readLine() ;
+                        }
+                        PrintWriter bread789 = new PrintWriter(new FileWriter(ft), true) ;
+                        bread789.println("") ;
+                        Date date = new Date();
+                        Timestamp ts = new Timestamp(date.getTime());
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        pwsft.println(formatter.format(ts)) ;
+                        System.out.println("This quiz is over and is being submitted") ;
+                        File quizGradingReport = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "$$gradingReport.txt") ;
+                        quizGradingReport.createNewFile() ;
+                        BufferedReader brGrading = new BufferedReader(new FileReader(quizGradingReport)) ;
+                        PrintWriter pwGrading = new PrintWriter(new FileWriter(quizGradingReport), true) ;
+                        //File rt = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "Solutions.txt") ;
+                        BufferedReader brGradingFrom = new BufferedReader(new FileReader(f468)) ;
+                        BufferedReader brGraded = new BufferedReader(new FileReader(studentAnswersOnly)) ;
+                        String checked = brGraded.readLine() ;
+                        String checker = brGradingFrom.readLine() ;
+                        int d = 0 ;
+                        int totalPoints = 0 ;
+                        while(checked != null) {
+                            d++ ;
+                            if (checked.equals(checker.substring(checker.indexOf(" ") + 1))) {
+                                pwGrading.println(String.format("Question %d - correct - %d points", d, 2)) ;
+                                totalPoints += 2 ;
+                            } else {
+                                pwGrading.println(String.format("Question %d - wrong - %d points", d, 0)) ;
+                            }
+                            checked = brGraded.readLine() ;
+                            checker = brGradingFrom.readLine() ;
+                        }
+                        pwStudentAnswersOnly.println(formatter.format(ts)) ;
+                        pwGrading.println("total points - " + totalPoints) ;
+                        PrintWriter pw901 = new PrintWriter(new FileWriter(f1), true) ;
+                        System.out.println(attemptNumber) ;
+                        pw901.println(Integer.toString(attemptNumber + 1)) ;
+                        pw901.flush() ;
+                    } else {
+                        File f457 = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "formQuiz.txt") ;
+                        f457.createNewFile() ;
+                        ArrayList<Integer> questionRandomize = new ArrayList<>() ;
+                        for (int i = 1 ; i <= noOfQuestions ; i++) {
+                            questionRandomize.add(i) ;
+                        }
+                        int[] questionOrder = new int[5] ;
+                        for (int i = 1 ; i <= 5 ; i++) {
+                            int h = (int)(((Math.random()*((noOfQuestions - i+1)-1+1)+1)) - 1) ;
+                            questionOrder[i - 1] = questionRandomize.get(h) ;
+                            questionRandomize.remove(h) ;
+                        }
+                        BufferedReader read = new BufferedReader(new FileReader(f457)) ;
+                        PrintWriter pw98 = new PrintWriter(new FileWriter(f457), true) ;
+                        pw98.println(quizTitle) ;
+                        File f468 = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "Solutions.txt") ;
+                        f468.createNewFile() ;
+                        BufferedReader read468 = new BufferedReader(new FileReader(f468)) ;
+                        PrintWriter pw468 = new PrintWriter(new FileWriter(f468), true) ;
+                        for (int y = 0 ; y < questionOrder.length ; y++) {
+                            String inLine = "" ;
+                            for (int lp = 0 ; lp < 6 ; lp++) {
+                                if (lp % 6 == 0) {
+                                    inLine += Integer.toString(y + 1) + ". " + questionArray1[questionOrder[y]][0] + "@" ;
+                                }  else if (lp % 6 == 5) {
+                                    pw468.println(Integer.toString(y + 1) + ". " + questionArray1[questionOrder[y]][5]) ;
+                                } else {
+                                    if (lp == 1) {
+                                        inLine += "A) " + questionArray1[questionOrder[y]][lp] + "@" ;
+                                    } else if (lp == 2) {
+                                        inLine += "B) " + questionArray1[questionOrder[y]][lp] + "@" ;
+                                    } else if (lp== 3) {
+                                        inLine += "C) " + questionArray1[questionOrder[y]][lp] + "@" ;
+                                    } else {
+                                        inLine += "D) " + questionArray1[questionOrder[y]][lp] + "@" ;
+                                    }
+                                }
+                            }
+                            pw98.println(inLine) ;
+                        }
+                        File ft = new File(studentName + "$$processQuiz.txt") ;
+                        ft.createNewFile() ;
+                        BufferedReader readft = new BufferedReader(new FileReader(ft)) ;
+                        PrintWriter pwft = new PrintWriter(new FileWriter(ft), true) ;
+                        pwft.println(String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d" , teacherName, courseName, quizNumber, attemptNumber + 1, 1)) ;
+                        pwft.println(quizTitle) ;
+                        File sft = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "$$submission.txt") ;
+                        sft.createNewFile() ;
+                        File studentAnswersOnly = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "$$submittedAnswers.txt") ;
+                        studentAnswersOnly.createNewFile() ;
+                        BufferedReader readStudentAnswersOnly = new BufferedReader(new FileReader(studentAnswersOnly)) ;
+                        PrintWriter pwStudentAnswersOnly = new PrintWriter(new FileWriter(studentAnswersOnly), true) ;
+                        BufferedReader readsft = new BufferedReader(new FileReader(sft)) ;
+                        PrintWriter pwsft = new PrintWriter(new FileWriter(sft), true) ;
+                        pwsft.println(quizTitle) ;
+                        String quizStarting = read.readLine() ;
+                        int counterAgain = 0 ;
+                        while (quizStarting != null) {
+                            counterAgain++ ;
+                            if (counterAgain == 1) {
+                                System.out.println(quizStarting) ;
+                            } else {
+                                System.out.print(quizStarting.replaceAll("@" , "\n")) ;
+                                int choic ;
+                                do {
+                                    System.out.println("1. Enter the response\n2. attach a file with the response") ;
+                                    choic = sc.nextInt() ;
+                                    sc.nextLine() ;
+                                    if (choic == 1 || choic == 2) {
+                                        break ;
+                                    } else {
+                                        System.out.println("invalid response") ;
+                                    }
+                                } while (true) ;
+                                do {
+                                    if (choic == 2) {
+                                        System.out.println("Enter the file path") ;
+                                        String responseFilePath = sc.nextLine() ;
+                                        File fresponse = new File(responseFilePath) ;
+                                        if (fresponse.length() == 0) {
+                                            System.out.println("The file does not exist or is empty. Please enter a valid file path") ;
+                                        } else {
+                                            BufferedReader re = new BufferedReader(new FileReader(fresponse)) ;
+                                            String answer = re.readLine() ;
+                                            pwStudentAnswersOnly.println(answer) ;
+                                            BufferedReader bread = new BufferedReader(new FileReader(ft)) ;
+                                            String readings = bread.readLine() ;
+                                            String appendingString = "" ;
+                                            int cf = 0 ;
+                                            while(readings != null) {
+                                                cf++ ;
+                                                if (cf == 1) {
+                                                    appendingString += String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d" , teacherName, courseName, quizNumber, attemptNumber + 1, counterAgain) + "\n" ;
+
+                                                } else {
+                                                    appendingString += readings + "\n" ;
+                                                }
+                                                readings = bread.readLine() ;
+                                            }
+                                            appendingString += quizStarting.replaceAll("@" , "\n") ;
+                                            appendingString += answer + "\n" ;
+                                            PrintWriter pw35 = new PrintWriter(new FileWriter(ft), true) ;
+                                            pw35.println(appendingString) ;
+                                            pwsft.print(quizStarting.replaceAll("@" , "\n")) ;
+                                            pwsft.print(answer + "\n") ;
+                                            pwsft.flush() ;
+                                            break ;
+                                        }
+                                    } else {
+                                        System.out.println("Enter the answer") ;
+                                        String answer = sc.nextLine() ;
+                                        pwStudentAnswersOnly.println(answer) ;
+                                        BufferedReader bread = new BufferedReader(new FileReader(ft)) ;
+                                        String readings = bread.readLine() ;
+                                        String appendingString = "" ;
+                                        int cf = 0 ;
+                                        while(readings != null) {
+                                            cf++ ;
+                                            if (cf == 1) {
+                                                appendingString += String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d" , teacherName, courseName, quizNumber, attemptNumber + 1, counterAgain) + "\n" ;
+                                            } else {
+                                                appendingString += readings + "\n" ;
+                                            }
+                                            readings = bread.readLine() ;
+                                        }
+                                        appendingString += quizStarting.replaceAll("@" , "\n") ;
+                                        appendingString += answer + "\n" ;
+                                        PrintWriter pw35 = new PrintWriter(new FileWriter(ft), true) ;
+                                        pw35.println(appendingString) ;
+                                        pwsft.print(quizStarting.replaceAll("@" , "\n")) ;
+                                        pwsft.print(answer + "\n") ;
+                                        pwsft.flush() ;
+                                        break ;
+                                    }
+                                } while (true) ;
+                            }
+                            quizStarting = read.readLine() ;
+                        }
+                        PrintWriter bread789 = new PrintWriter(new FileWriter(ft), true) ;
+                        bread789.println("") ;
+                        Date date = new Date();
+                        Timestamp ts = new Timestamp(date.getTime());
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        pwsft.println(formatter.format(ts)) ;
+                        pwStudentAnswersOnly.println(formatter.format(ts)) ;
+                        System.out.println("This quiz is over and is being submitted") ;
+                        File quizGradingReport = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "$$gradingReport.txt") ;
+                        BufferedReader brGrading = new BufferedReader(new FileReader(quizGradingReport)) ;
+                        PrintWriter pwGrading = new PrintWriter(new FileWriter(quizGradingReport)) ;
+                        BufferedReader brGradingFrom = new BufferedReader(new FileReader(f468)) ;
+                        BufferedReader brGraded = new BufferedReader(new FileReader(studentAnswersOnly)) ;
+                        String checked = brGraded.readLine() ;
+                        String checker = brGradingFrom.readLine() ;
+                        int d = 0 ;
+                        int totalPoints = 0 ;
+                        while(checked != null) {
+                            d++ ;
+                            if (checked.equals(checker.substring(checker.indexOf(" ") + 1))) {
+                                pwGrading.println(String.format("Question %d - correct - %d points", d, 2)) ;
+                                totalPoints += 2 ;
+                            } else {
+                                pwGrading.println(String.format("Question %d - wrong - %d points", d, 0)) ;
+                            }
+                            checked = brGraded.readLine() ;
+                            checker = brGradingFrom.readLine() ;
+                        }
+                        pwGrading.println("total points - " + totalPoints) ;
+                        PrintWriter pw901 = new PrintWriter(new FileWriter(f1), true) ;
+                        pw901.print(Integer.toString(attemptNumber + 1)) ;
+                        pw901.flush() ;
+                    }
+                }
+            } else if (quizIdentifier.contains("fill in the blanks")) {
+
+            } else {
+
+            }
         }
+
+
     }
+
 }
