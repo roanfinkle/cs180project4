@@ -5,6 +5,9 @@ public class Courses {
     private String courseName;
     private ArrayList<Quiz> quizList = new ArrayList<>();
 
+    //Constructor for course that has not already been created
+    //Constructs a courses object with arguments courseName and courseListFileName.
+    //CourseListFileName written to with the name of the course
     public Courses(String courseName, String courseListFileName) throws IOException {
         this.courseName = courseName;
         File f = new File(courseListFileName);
@@ -15,74 +18,75 @@ public class Courses {
             s += str + "\n";
             str = br.readLine();
         }
+        br.close();
         s += courseName + "\n";
         PrintWriter pw = new PrintWriter(new FileWriter(f), true);
         pw.print(s);
         pw.close();
     }
 
+    //Constructor for a course that has already been created
     public Courses(String courseName) {
         this.courseName = courseName;
     }
 
+    //Getter for courseName
     public String getCourseName() {
         return this.courseName;
     }
 
-    public boolean createQuiz(int quizNumber, String quizListFileName, int numOfQuestions, String type, String poolOrExact, String fileOrManually, boolean randomize) throws IOException {
+    //Method that creates a new Quiz object and adds it to an Array that stores them called quizList
+    public boolean createQuiz(int quizNumber, String quizListFileName, int numOfQuestions, 
+        String type, String poolOrExact, String fileOrManually, boolean randomize) throws IOException {
         this.quizList.add(new Quiz(quizNumber, quizListFileName, numOfQuestions, type, poolOrExact, fileOrManually, randomize));
         return true;
     }
 
+    //Method that checks the quiz type
+    //Returns not contained for a null quiz
+    //Returns filepool, fileexact, manualpoolMCQ, or manualexactMCQ
+    //Adds quiz objects to ArrayList quizList
     public String enterQuiz(int quizNumber, String quizListFileName) throws IOException {
         File f = new File(quizListFileName);
         BufferedReader br = new BufferedReader(new FileReader(f));
-        String er = br.readLine();
+        String str = br.readLine();
         String returnValue = "";
-        if (er == null) {
+        if (str == null) {
+            br.close();
             return "not contained";
         } else {
             int c = 0;
-            while (er != null) {
-                if (er.substring(0, er.indexOf('(')).equals("Quiz" + Integer.toString(quizNumber))) {
+            while (str != null) {
+                if (str.substring(0, str.indexOf('(')).equals("Quiz" + Integer.toString(quizNumber))) {
                     c++;
-                    if (er.contains("file")) {
-                        if (er.contains("pool")) {
+                    if (str.contains("file")) {
+                        if (str.contains("pool")) {
                             returnValue = "filepool";
                         } else {
                             returnValue = "fileexact";
                         }
                     } else {
-                        if (er.contains("pool")) {
-                            if (er.contains("MCQ")) {
-                                returnValue = "manualpoolMCQ";
-                            } else if (er.contains("fill in the blanks")) {
-                                returnValue = "manualpoolfillintheblanks";
-                            } else {
-                                returnValue = "manualpooltrue/false";
-                            }
+                        if (str.contains("pool")) {
+                            returnValue = "manualpoolMCQ";
                         } else {
-                            if (er.contains("MCQ")) {
-                                returnValue = "manualexactMCQ";
-                            } else if (er.contains("fill in the blanks")) {
-                                returnValue = "manualexactfillintheblanks";
-                            } else {
-                                returnValue = "manualexacttrue/false";
-                            }
+                            returnValue = "manualexactMCQ";
                         }
                     }
                 }
-                er = br.readLine();
+                str = br.readLine();
             }
             if (c == 0) {
+                br.close();
                 return "not contained";
             } else {
+                br.close();
                 this.quizList.add(new Quiz(quizNumber));
                 return returnValue;
             }
         }
     }
 
+    //Returns quizList Array
     public ArrayList<Quiz> getListQuizzes() {
         return this.quizList;
     }
