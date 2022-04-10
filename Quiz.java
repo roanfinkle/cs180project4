@@ -18,6 +18,7 @@ public class Quiz {
             s += str + "\n";
             str = br.readLine();
         }
+        br.close();
         s += "Quiz" + Integer.toString(quizNumber) + "(";
         s += Integer.toString(numOfQuestions) + ")" + "(" + type + ")";
         s += "(" + poolOrExact + ")" + "(" + fileOrManually + ")";
@@ -41,6 +42,8 @@ public class Quiz {
             BufferedReader br7 = new BufferedReader(new FileReader(f7));
             String str7 = br7.readLine();
             if (str == null || str7 == null) {
+                br.close();
+                br7.close();
                 return false;
             } else {
                 String s = "";
@@ -53,6 +56,8 @@ public class Quiz {
                     temp += str7 + "\n";
                     str7 = br7.readLine();
                 }
+                br.close();
+                br7.close();
                 File f2 = new File(quizFileName);
                 f2.createNewFile();
                 File f67 = new File(quizFileName.substring(0, quizFileName.indexOf('.')) + "$$Answers.txt");
@@ -79,8 +84,9 @@ public class Quiz {
             File f7 = new File(answerFilePath);
             BufferedReader br7 = new BufferedReader(new FileReader(f7));
             String str7 = br7.readLine();
-            String returnValue;
             if (str == null || str7 == null) {
+                br.close();
+                br7.close();
                 return false;
             } else {
                 String s = "";
@@ -93,6 +99,8 @@ public class Quiz {
                     temp += str7 + "\n";
                     str7 = br7.readLine();
                 }
+                br.close();
+                br7.close();
                 File f2 = new File(quizFileName);
                 f2.createNewFile();
                 File f67 = new File(quizFileName.substring(0, quizFileName.indexOf('.')) + "$$Answers.txt");
@@ -132,8 +140,8 @@ public class Quiz {
             l += line + "\n";
             line = br5.readLine();
         }
-
-        PrintWriter pw3 = new PrintWriter(new FileWriter(f3), true);
+        br.close();
+        br5.close();
         Scanner sc = new Scanner(System.in);
         if (type.equals("MCQ")) {
             if (s.equals("") || s == null) {
@@ -148,7 +156,7 @@ public class Quiz {
                     String option;
                     boolean h;
                     do {
-                        System.out.println("Do you want to enter the question?\n1. yes\n2. no");
+                        System.out.println("Do you want to create a question?\n1. yes\n2. no");
                         option = sc.nextLine();
                         if (!(option.equals("1") || option.equals("2"))) {
                             System.out.println("Enter a valid option!");
@@ -158,12 +166,13 @@ public class Quiz {
                         }
                     } while (!h);
                     if (option.equals("1")) {
-                        System.out.println("Enter the question:");
+                        System.out.println("Enter the question statement:");
                         String qs = sc.nextLine();
                         questionNumber++;
                         String answerChoices;
                         s += Integer.toString(questionNumber) + ". " + qs + '\n';
                         pw.println(Integer.toString(questionNumber) + ". " + qs);
+                        pw.close();
                         for (int cn = 1; cn <= 4; cn++) {
                             if (cn == 1) {
                                 System.out.println("Enter the first answer choice:");
@@ -247,6 +256,7 @@ public class Quiz {
                                 numLines++;
                                 linesCounter = frgt.readLine();
                             }
+                            frgt.close();
                             if (numLines % 5 == 1) {
                                 System.out.println("Enter the four answer choices for question number "
                                         + Integer.toString(numLines / 5 + 1));
@@ -301,11 +311,12 @@ public class Quiz {
                             } else if (numLines % 5 == 0) {
                                 System.out.println("Enter the question and four answer choices for question number "
                                         + Integer.toString(numLines / 5 + 1));
-                                System.out.println("Enter the question:");
+                                System.out.println("Enter the question statement:");
                                 String qs = sc.nextLine();
                                 s += Integer.toString(numLines / 5 + 1) + ". " + qs + '\n';
                                 PrintWriter pw = new PrintWriter(new FileWriter(f2), true);
                                 pw.println(Integer.toString(numLines / 5 + 1) + ". " + qs);
+                                pw.close();
                                 for (int cn = 1; cn <= 4; cn++) {
                                     String answerChoices;
                                     if (cn == 1) {
@@ -449,6 +460,7 @@ public class Quiz {
                                     pw1.close();
                                     BufferedReader vf = new BufferedReader(new FileReader(f2));
                                     s1 = vf.readLine();
+                                    vf.close();
                                     int ct = -1;
                                     while (s1 != null) {
                                         ct++;
@@ -518,7 +530,7 @@ public class Quiz {
                             if (!(s.contains(str1))) {
                                 System.out.println("This question is not yet added to the quiz.");
                             } else {
-                                System.out.println("Enter the new question.");
+                                System.out.println("Enter the new question statement.");
                                 String nqs = sc.nextLine();
                                 System.out.println("Enter the first answer choice:");
                                 String firstOption = sc.nextLine();
