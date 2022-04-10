@@ -51,7 +51,7 @@ public class Courses {
         BufferedReader br = new BufferedReader(new FileReader(f));
         String str = br.readLine();
         String returnValue = "";
-        if (str == null) {
+        if (str == null || str.equals("") || str.equals(" ")) {
             br.close();
             return "not contained";
         } else {
