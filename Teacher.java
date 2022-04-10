@@ -77,7 +77,7 @@ public class Teacher {
         File f = new File(courseListFileName);
         BufferedReader br = new BufferedReader(new FileReader(f));
         String str = br.readLine();
-        if (str == null) {
+        if (str == null || str.equals("") || str.equals(" ")) {
             br.close();
             return false;
         } else {
