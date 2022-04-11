@@ -1,7 +1,15 @@
 import java.io.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-
+/**
+ * Quiz class to create Quizzes 
+ * Purdue University -- CS18000 -- Spring 2022 -- Project
+ * 4
+ *
+ * @author Ritwik Jain
+ * @version April 04, 2022
+ * Lab sec 03
+ */
 public class Quiz {
     private int quizNumber;
     private int numOfQuestions;
