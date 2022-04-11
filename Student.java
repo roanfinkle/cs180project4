@@ -4,7 +4,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
-
+/**
+ * Student class to let the student attempt
+ * the quiz created in a particular course
+ * Purdue University -- CS18000 -- Spring 2022 -- Project
+ * 4
+ *
+ * @author Ritwik Jain
+ * @version April 04, 2022
+ * Lab sec 03
+ */
 public class Student {
     public void takeQuiz(String studentName, String teacherName,
                          String courseName, int quizNumber,
