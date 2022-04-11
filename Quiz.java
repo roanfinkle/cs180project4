@@ -1,8 +1,9 @@
 import java.io.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
 /**
- * Quiz class to create Quizzes 
+ * Quiz class to create Quizzes
  * Purdue University -- CS18000 -- Spring 2022 -- Project
  * 4
  *
@@ -491,6 +492,7 @@ public class Quiz {
                                     pw3456.print(s2);
                                     pw3456.flush();
                                     pw3456.close();
+                                    s = s2.substring(0, s2.length() - 1) + '\n';
                                 }
                                 int c = 0;
                                 for (int i = 0; i < l.length(); i++) {
