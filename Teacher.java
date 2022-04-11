@@ -1,6 +1,15 @@
 import java.io.*;
 import java.util.ArrayList;
-
+/**
+ * Teacher class to create new Teachers and 
+ * enabke them to create and enter courses
+ * Purdue University -- CS18000 -- Spring 2022 -- Project
+ * 4
+ *
+ * @author Ritwik Jain
+ * @version April 04, 2022
+ * Lab sec 03
+ */
 public class Teacher {
     private String userName;
     private String password;
