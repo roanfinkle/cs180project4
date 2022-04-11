@@ -6,10 +6,13 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class Student {
-    public void takeQuiz(String studentName, String teacherName, String courseName, int quizNumber, String quizIdentifier) throws IOException {
+    public void takeQuiz(String studentName, String teacherName,
+                         String courseName, int quizNumber,
+                         String quizIdentifier) throws IOException {
         ArrayList<String> arr = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
-        File f1 = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$AttemptTracker.txt");
+        File f1 = new File(studentName + "$$" + teacherName + "$$" +
+                courseName + "$$" + Integer.toString(quizNumber) + "$$AttemptTracker.txt");
         f1.createNewFile();
         BufferedReader br29 = new BufferedReader(new FileReader(f1));
         String gl = br29.readLine();
@@ -19,7 +22,8 @@ public class Student {
         }
         BufferedReader br92 = new BufferedReader(new FileReader(f1));
         int attemptNumber = Integer.parseInt(br92.readLine());
-        int noOfQuestions = Integer.parseInt(quizIdentifier.substring(quizIdentifier.indexOf('(') + 1, quizIdentifier.indexOf(')', quizIdentifier.indexOf('(') + 1)));
+        int noOfQuestions = Integer.parseInt(quizIdentifier.substring(quizIdentifier.indexOf('(') + 1,
+                quizIdentifier.indexOf(')', quizIdentifier.indexOf('(') + 1)));
         System.out.println(noOfQuestions);
         String[][] questionArray = new String[noOfQuestions][6];
         String[][] questionArray1 = new String[noOfQuestions][6];
@@ -34,9 +38,11 @@ public class Student {
             optionOrder[i - 1] = optionRandomize.get(h);
             optionRandomize.remove(h);
         }
-        BufferedReader br56 = new BufferedReader((new FileReader(teacherName + "$$" + courseName + "$$" + quizNumber + ".txt")));
+        BufferedReader br56 = new BufferedReader((new FileReader(teacherName +
+                "$$" + courseName + "$$" + quizNumber + ".txt")));
         String copier = br56.readLine();
-        BufferedReader br57 = new BufferedReader((new FileReader(teacherName + "$$" + courseName + "$$" + quizNumber + "$$Answers.txt")));
+        BufferedReader br57 = new BufferedReader((new FileReader(teacherName +
+                "$$" + courseName + "$$" + quizNumber + "$$Answers.txt")));
         String answerCopier;
         String quizTitle = "";
         if (copier == null) {
@@ -103,7 +109,9 @@ public class Student {
             if (quizIdentifier.contains("MCQ")) {
                 if (quizIdentifier.contains("true")) {
                     if (quizIdentifier.contains("pool")) {
-                        File f457 = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "formQuiz.txt");
+                        File f457 = new File(studentName + "$$" + teacherName + "$$" +
+                                courseName + "$$" + Integer.toString(quizNumber) + "$$" +
+                                Integer.toString(attemptNumber + 1) + "formQuiz.txt");
                         f457.createNewFile();
                         ArrayList<Integer> questionRandomize = new ArrayList<>();
                         for (int i = 1; i <= noOfQuestions; i++) {
@@ -118,7 +126,9 @@ public class Student {
                         BufferedReader read = new BufferedReader(new FileReader(f457));
                         PrintWriter pw98 = new PrintWriter(new FileWriter(f457), true);
                         pw98.println(quizTitle);
-                        File f468 = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "Solutions.txt");
+                        File f468 = new File(studentName + "$$" + teacherName + "$$" +
+                                courseName + "$$" + Integer.toString(quizNumber) + "$$" +
+                                Integer.toString(attemptNumber + 1) + "Solutions.txt");
                         f468.createNewFile();
                         BufferedReader read468 = new BufferedReader(new FileReader(f468));
                         PrintWriter pw468 = new PrintWriter(new FileWriter(f468), true);
@@ -126,9 +136,11 @@ public class Student {
                             String inLine = "";
                             for (int lp = 0; lp < 6; lp++) {
                                 if (lp % 6 == 0) {
-                                    inLine += Integer.toString(y + 1) + ". " + questionArray1[questionOrder[y] - 1][0] + "@";
+                                    inLine += Integer.toString(y + 1) + ". " +
+                                            questionArray1[questionOrder[y] - 1][0] + "@";
                                 } else if (lp % 6 == 5) {
-                                    pw468.println(Integer.toString(y + 1) + ". " + questionArray1[questionOrder[y] - 1][5]);
+                                    pw468.println(Integer.toString(y + 1) + ". " +
+                                            questionArray1[questionOrder[y] - 1][5]);
                                 } else {
                                     if (lp == 1) {
                                         inLine += "A) " + questionArray1[questionOrder[y] - 1][lp] + "@";
@@ -147,14 +159,20 @@ public class Student {
                         ft.createNewFile();
                         BufferedReader readft = new BufferedReader(new FileReader(ft));
                         PrintWriter pwft = new PrintWriter(new FileWriter(ft), true);
-                        pwft.println(String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d", teacherName, courseName, quizNumber, attemptNumber + 1, 1));
+                        pwft.println(String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d", teacherName,
+                                courseName, quizNumber, attemptNumber + 1, 1));
                         pwft.println(quizTitle);
-                        File sft = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "$$submission.txt");
+                        File sft = new File(studentName + "$$" + teacherName + "$$" +
+                                courseName + "$$" + Integer.toString(quizNumber) + "$$" +
+                                Integer.toString(attemptNumber + 1) + "$$submission.txt");
                         sft.createNewFile();
-                        File studentAnswersOnly = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "$$submittedAnswers.txt");
+                        File studentAnswersOnly = new File(studentName + "$$" +
+                                teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) +
+                                "$$" + Integer.toString(attemptNumber + 1) + "$$submittedAnswers.txt");
                         studentAnswersOnly.createNewFile();
                         BufferedReader readStudentAnswersOnly = new BufferedReader(new FileReader(studentAnswersOnly));
-                        PrintWriter pwStudentAnswersOnly = new PrintWriter(new FileWriter(studentAnswersOnly), true);
+                        PrintWriter pwStudentAnswersOnly = new PrintWriter(new FileWriter(studentAnswersOnly),
+                                true);
                         BufferedReader readsft = new BufferedReader(new FileReader(sft));
                         PrintWriter pwsft = new PrintWriter(new FileWriter(sft), true);
                         pwsft.println(quizTitle);
@@ -182,7 +200,8 @@ public class Student {
                                         String responseFilePath = sc.nextLine();
                                         File fresponse = new File(responseFilePath);
                                         if (fresponse.length() == 0) {
-                                            System.out.println("The file does not exist or is empty. Please enter a valid file path");
+                                            System.out.println("The file does not exist or is empty. " +
+                                                    "Please enter a valid file path");
                                         } else {
                                             BufferedReader re = new BufferedReader(new FileReader(fresponse));
                                             String answer = re.readLine();
@@ -194,7 +213,8 @@ public class Student {
                                             while (readings != null) {
                                                 cf++;
                                                 if (cf == 1) {
-                                                    appendingString += String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d", teacherName, courseName, quizNumber, attemptNumber + 1, counterAgain) + "\n";
+                                                    appendingString += String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d", teacherName,
+                                                            courseName, quizNumber, attemptNumber + 1, counterAgain) + "\n";
 
                                                 } else {
                                                     appendingString += readings + "\n";
@@ -229,7 +249,8 @@ public class Student {
                                         while (readings != null) {
                                             cf++;
                                             if (cf == 1) {
-                                                appendingString += String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d", teacherName, courseName, quizNumber, attemptNumber + 1, counterAgain) + "\n";
+                                                appendingString += String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d", teacherName,
+                                                        courseName, quizNumber, attemptNumber + 1, counterAgain) + "\n";
                                             } else {
                                                 appendingString += readings + "\n";
                                             }
@@ -255,11 +276,12 @@ public class Student {
                         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         pwsft.println(formatter.format(ts));
                         System.out.println("This quiz is over and is being submitted");
-                        File quizGradingReport = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "$$gradingReport.txt");
+                        File quizGradingReport = new File(studentName + "$$" + teacherName + "$$" +
+                                courseName + "$$" + Integer.toString(quizNumber) + "$$" +
+                                Integer.toString(attemptNumber + 1) + "$$gradingReport.txt");
                         quizGradingReport.createNewFile();
                         BufferedReader brGrading = new BufferedReader(new FileReader(quizGradingReport));
                         PrintWriter pwGrading = new PrintWriter(new FileWriter(quizGradingReport), true);
-                        //File rt = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "Solutions.txt") ;
                         BufferedReader brGradingFrom = new BufferedReader(new FileReader(f468));
                         BufferedReader brGraded = new BufferedReader(new FileReader(studentAnswersOnly));
                         String checked = brGraded.readLine();
@@ -283,7 +305,9 @@ public class Student {
                         pw901.println(Integer.toString(attemptNumber + 1));
                         pw901.flush();
                     } else {
-                        File f457 = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "formQuiz.txt");
+                        File f457 = new File(studentName + "$$" + teacherName + "$$" +
+                                courseName + "$$" + Integer.toString(quizNumber) + "$$" +
+                                Integer.toString(attemptNumber + 1) + "formQuiz.txt");
                         f457.createNewFile();
                         ArrayList<Integer> questionRandomize = new ArrayList<>();
                         for (int i = 1; i <= noOfQuestions; i++) {
@@ -298,7 +322,9 @@ public class Student {
                         BufferedReader read = new BufferedReader(new FileReader(f457));
                         PrintWriter pw98 = new PrintWriter(new FileWriter(f457), true);
                         pw98.println(quizTitle);
-                        File f468 = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "Solutions.txt");
+                        File f468 = new File(studentName + "$$" + teacherName + "$$" +
+                                courseName + "$$" + Integer.toString(quizNumber) + "$$" +
+                                Integer.toString(attemptNumber + 1) + "Solutions.txt");
                         f468.createNewFile();
                         BufferedReader read468 = new BufferedReader(new FileReader(f468));
                         PrintWriter pw468 = new PrintWriter(new FileWriter(f468), true);
@@ -306,9 +332,11 @@ public class Student {
                             String inLine = "";
                             for (int lp = 0; lp < 6; lp++) {
                                 if (lp % 6 == 0) {
-                                    inLine += Integer.toString(y + 1) + ". " + questionArray1[questionOrder[y] - 1][0] + "@";
+                                    inLine += Integer.toString(y + 1) + ". " +
+                                            questionArray1[questionOrder[y] - 1][0] + "@";
                                 } else if (lp % 6 == 5) {
-                                    pw468.println(Integer.toString(y + 1) + ". " + questionArray1[questionOrder[y] - 1][5]);
+                                    pw468.println(Integer.toString(y + 1) + ". " +
+                                            questionArray1[questionOrder[y] - 1][5]);
                                 } else {
                                     if (lp == 1) {
                                         inLine += "A) " + questionArray1[questionOrder[y] - 1][lp] + "@";
@@ -327,14 +355,20 @@ public class Student {
                         ft.createNewFile();
                         BufferedReader readft = new BufferedReader(new FileReader(ft));
                         PrintWriter pwft = new PrintWriter(new FileWriter(ft), true);
-                        pwft.println(String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d", teacherName, courseName, quizNumber, attemptNumber + 1, 1));
+                        pwft.println(String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d", teacherName,
+                                courseName, quizNumber, attemptNumber + 1, 1));
                         pwft.println(quizTitle);
-                        File sft = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "$$submission.txt");
+                        File sft = new File(studentName + "$$" + teacherName + "$$" +
+                                courseName + "$$" + Integer.toString(quizNumber) + "$$" +
+                                Integer.toString(attemptNumber + 1) + "$$submission.txt");
                         sft.createNewFile();
-                        File studentAnswersOnly = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "$$submittedAnswers.txt");
+                        File studentAnswersOnly = new File(studentName + "$$" +
+                                teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) +
+                                "$$" + Integer.toString(attemptNumber + 1) + "$$submittedAnswers.txt");
                         studentAnswersOnly.createNewFile();
                         BufferedReader readStudentAnswersOnly = new BufferedReader(new FileReader(studentAnswersOnly));
-                        PrintWriter pwStudentAnswersOnly = new PrintWriter(new FileWriter(studentAnswersOnly), true);
+                        PrintWriter pwStudentAnswersOnly = new PrintWriter(new FileWriter(studentAnswersOnly),
+                                true);
                         BufferedReader readsft = new BufferedReader(new FileReader(sft));
                         PrintWriter pwsft = new PrintWriter(new FileWriter(sft), true);
                         pwsft.println(quizTitle);
@@ -361,12 +395,11 @@ public class Student {
                                         System.out.println("Enter the file path");
                                         String responseFilePath = sc.nextLine();
                                         File fresponse = new File(responseFilePath);
-                                        System.out.println(fresponse.createNewFile());
                                         BufferedReader mz = new BufferedReader(new FileReader(fresponse));
                                         String temp = mz.readLine();
-                                        System.out.println(temp);
                                         if (fresponse.createNewFile() || temp == null) {
-                                            System.out.println("The file does not exist or is empty. Please enter a valid file path");
+                                            System.out.println("The file does not exist or is empty. " +
+                                                    "Please enter a valid file path");
                                         } else {
                                             BufferedReader re = new BufferedReader(new FileReader(fresponse));
                                             String answer = re.readLine();
@@ -378,7 +411,8 @@ public class Student {
                                             while (readings != null) {
                                                 cf++;
                                                 if (cf == 1) {
-                                                    appendingString += String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d", teacherName, courseName, quizNumber, attemptNumber + 1, counterAgain) + "\n";
+                                                    appendingString += String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d", teacherName,
+                                                            courseName, quizNumber, attemptNumber + 1, counterAgain) + "\n";
 
                                                 } else {
                                                     appendingString += readings + "\n";
@@ -413,7 +447,8 @@ public class Student {
                                         while (readings != null) {
                                             cf++;
                                             if (cf == 1) {
-                                                appendingString += String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d", teacherName, courseName, quizNumber, attemptNumber + 1, counterAgain) + "\n";
+                                                appendingString += String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d", teacherName,
+                                                        courseName, quizNumber, attemptNumber + 1, counterAgain) + "\n";
                                             } else {
                                                 appendingString += readings + "\n";
                                             }
@@ -439,7 +474,9 @@ public class Student {
                         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         pwsft.println(formatter.format(ts));
                         System.out.println("This quiz is over and is being submitted");
-                        File quizGradingReport = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "$$gradingReport.txt");
+                        File quizGradingReport = new File(studentName + "$$" + teacherName + "$$" +
+                                courseName + "$$" + Integer.toString(quizNumber) + "$$" +
+                                Integer.toString(attemptNumber + 1) + "$$gradingReport.txt");
                         quizGradingReport.createNewFile();
                         BufferedReader brGrading = new BufferedReader(new FileReader(quizGradingReport));
                         PrintWriter pwGrading = new PrintWriter(new FileWriter(quizGradingReport), true);
@@ -468,7 +505,9 @@ public class Student {
                     }
                 } else {
                     if (quizIdentifier.contains("pool")) {
-                        File f457 = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "formQuiz.txt");
+                        File f457 = new File(studentName + "$$" + teacherName + "$$" +
+                                courseName + "$$" + Integer.toString(quizNumber) + "$$" +
+                                Integer.toString(attemptNumber + 1) + "formQuiz.txt");
                         f457.createNewFile();
                         ArrayList<Integer> questionRandomize = new ArrayList<>();
                         for (int i = 1; i <= noOfQuestions; i++) {
@@ -483,7 +522,9 @@ public class Student {
                         BufferedReader read = new BufferedReader(new FileReader(f457));
                         PrintWriter pw98 = new PrintWriter(new FileWriter(f457), true);
                         pw98.println(quizTitle);
-                        File f468 = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "Solutions.txt");
+                        File f468 = new File(studentName + "$$" + teacherName + "$$" +
+                                courseName + "$$" + Integer.toString(quizNumber) + "$$" +
+                                Integer.toString(attemptNumber + 1) + "Solutions.txt");
                         f468.createNewFile();
                         BufferedReader read468 = new BufferedReader(new FileReader(f468));
                         PrintWriter pw468 = new PrintWriter(new FileWriter(f468), true);
@@ -512,14 +553,20 @@ public class Student {
                         ft.createNewFile();
                         BufferedReader readft = new BufferedReader(new FileReader(ft));
                         PrintWriter pwft = new PrintWriter(new FileWriter(ft), true);
-                        pwft.println(String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d", teacherName, courseName, quizNumber, attemptNumber + 1, 1));
+                        pwft.println(String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d", teacherName,
+                                courseName, quizNumber, attemptNumber + 1, 1));
                         pwft.println(quizTitle);
-                        File sft = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "$$submission.txt");
+                        File sft = new File(studentName + "$$" + teacherName + "$$" +
+                                courseName + "$$" + Integer.toString(quizNumber) + "$$" +
+                                Integer.toString(attemptNumber + 1) + "$$submission.txt");
                         sft.createNewFile();
-                        File studentAnswersOnly = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "$$submittedAnswers.txt");
+                        File studentAnswersOnly = new File(studentName + "$$" +
+                                teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) +
+                                "$$" + Integer.toString(attemptNumber + 1) + "$$submittedAnswers.txt");
                         studentAnswersOnly.createNewFile();
                         BufferedReader readStudentAnswersOnly = new BufferedReader(new FileReader(studentAnswersOnly));
-                        PrintWriter pwStudentAnswersOnly = new PrintWriter(new FileWriter(studentAnswersOnly), true);
+                        PrintWriter pwStudentAnswersOnly = new PrintWriter(new FileWriter(studentAnswersOnly),
+                                true);
                         BufferedReader readsft = new BufferedReader(new FileReader(sft));
                         PrintWriter pwsft = new PrintWriter(new FileWriter(sft), true);
                         pwsft.println(quizTitle);
@@ -559,7 +606,8 @@ public class Student {
                                             while (readings != null) {
                                                 cf++;
                                                 if (cf == 1) {
-                                                    appendingString += String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d", teacherName, courseName, quizNumber, attemptNumber + 1, counterAgain) + "\n";
+                                                    appendingString += String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d", teacherName,
+                                                            courseName, quizNumber, attemptNumber + 1, counterAgain) + "\n";
 
                                                 } else {
                                                     appendingString += readings + "\n";
@@ -594,7 +642,8 @@ public class Student {
                                         while (readings != null) {
                                             cf++;
                                             if (cf == 1) {
-                                                appendingString += String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d", teacherName, courseName, quizNumber, attemptNumber + 1, counterAgain) + "\n";
+                                                appendingString += String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d", teacherName,
+                                                        courseName, quizNumber, attemptNumber + 1, counterAgain) + "\n";
                                             } else {
                                                 appendingString += readings + "\n";
                                             }
@@ -620,10 +669,13 @@ public class Student {
                         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         pwsft.println(formatter.format(ts));
                         System.out.println("This quiz is over and is being submitted");
-                        File quizGradingReport = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "$$gradingReport.txt");
+                        File quizGradingReport = new File(studentName + "$$" + teacherName + "$$" +
+                                courseName + "$$" + Integer.toString(quizNumber) + "$$" +
+                                Integer.toString(attemptNumber + 1) + "$$gradingReport.txt");
                         quizGradingReport.createNewFile();
                         BufferedReader brGrading = new BufferedReader(new FileReader(quizGradingReport));
-                        PrintWriter pwGrading = new PrintWriter(new FileWriter(quizGradingReport), true);
+                        PrintWriter pwGrading = new PrintWriter(new FileWriter(quizGradingReport),
+                                true);
                         BufferedReader brGradingFrom = new BufferedReader(new FileReader(f468));
                         BufferedReader brGraded = new BufferedReader(new FileReader(studentAnswersOnly));
                         String checked = brGraded.readLine();
@@ -647,7 +699,9 @@ public class Student {
                         pw901.println(Integer.toString(attemptNumber + 1));
                         pw901.flush();
                     } else {
-                        File f457 = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "formQuiz.txt");
+                        File f457 = new File(studentName + "$$" + teacherName + "$$" + courseName +
+                                "$$" + Integer.toString(quizNumber) + "$$" +
+                                Integer.toString(attemptNumber + 1) + "formQuiz.txt");
                         f457.createNewFile();
                         ArrayList<Integer> questionRandomize = new ArrayList<>();
                         for (int i = 1; i <= noOfQuestions; i++) {
@@ -660,7 +714,9 @@ public class Student {
                         BufferedReader read = new BufferedReader(new FileReader(f457));
                         PrintWriter pw98 = new PrintWriter(new FileWriter(f457), true);
                         pw98.println(quizTitle);
-                        File f468 = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "Solutions.txt");
+                        File f468 = new File(studentName + "$$" + teacherName + "$$" +
+                                courseName + "$$" + Integer.toString(quizNumber) + "$$" +
+                                Integer.toString(attemptNumber + 1) + "Solutions.txt");
                         f468.createNewFile();
                         BufferedReader read468 = new BufferedReader(new FileReader(f468));
                         PrintWriter pw468 = new PrintWriter(new FileWriter(f468), true);
@@ -689,14 +745,20 @@ public class Student {
                         ft.createNewFile();
                         BufferedReader readft = new BufferedReader(new FileReader(ft));
                         PrintWriter pwft = new PrintWriter(new FileWriter(ft), true);
-                        pwft.println(String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d", teacherName, courseName, quizNumber, attemptNumber + 1, 1));
+                        pwft.println(String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d", teacherName,
+                                courseName, quizNumber, attemptNumber + 1, 1));
                         pwft.println(quizTitle);
-                        File sft = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "$$submission.txt");
+                        File sft = new File(studentName + "$$" + teacherName + "$$" +
+                                courseName + "$$" + Integer.toString(quizNumber) + "$$" +
+                                Integer.toString(attemptNumber + 1) + "$$submission.txt");
                         sft.createNewFile();
-                        File studentAnswersOnly = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "$$submittedAnswers.txt");
+                        File studentAnswersOnly = new File(studentName + "$$" + teacherName +
+                                "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" +
+                                Integer.toString(attemptNumber + 1) + "$$submittedAnswers.txt");
                         studentAnswersOnly.createNewFile();
                         BufferedReader readStudentAnswersOnly = new BufferedReader(new FileReader(studentAnswersOnly));
-                        PrintWriter pwStudentAnswersOnly = new PrintWriter(new FileWriter(studentAnswersOnly), true);
+                        PrintWriter pwStudentAnswersOnly = new PrintWriter(new FileWriter(studentAnswersOnly),
+                                true);
                         BufferedReader readsft = new BufferedReader(new FileReader(sft));
                         PrintWriter pwsft = new PrintWriter(new FileWriter(sft), true);
                         pwsft.println(quizTitle);
@@ -723,10 +785,8 @@ public class Student {
                                         System.out.println("Enter the file path");
                                         String responseFilePath = sc.nextLine();
                                         File fresponse = new File(responseFilePath);
-                                        System.out.println(fresponse.createNewFile());
                                         BufferedReader mz = new BufferedReader(new FileReader(fresponse));
                                         String temp = mz.readLine();
-                                        System.out.println(temp);
                                         if (fresponse.createNewFile() || temp == null) {
                                             System.out.println("The file does not exist or is empty. Please enter a valid file path");
                                         } else {
@@ -740,7 +800,8 @@ public class Student {
                                             while (readings != null) {
                                                 cf++;
                                                 if (cf == 1) {
-                                                    appendingString += String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d", teacherName, courseName, quizNumber, attemptNumber + 1, counterAgain) + "\n";
+                                                    appendingString += String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d", teacherName,
+                                                            courseName, quizNumber, attemptNumber + 1, counterAgain) + "\n";
 
                                                 } else {
                                                     appendingString += readings + "\n";
@@ -775,7 +836,8 @@ public class Student {
                                         while (readings != null) {
                                             cf++;
                                             if (cf == 1) {
-                                                appendingString += String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d", teacherName, courseName, quizNumber, attemptNumber + 1, counterAgain) + "\n";
+                                                appendingString += String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d", teacherName,
+                                                        courseName, quizNumber, attemptNumber + 1, counterAgain) + "\n";
                                             } else {
                                                 appendingString += readings + "\n";
                                             }
@@ -801,10 +863,13 @@ public class Student {
                         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         pwsft.println(formatter.format(ts));
                         System.out.println("This quiz is over and is being submitted");
-                        File quizGradingReport = new File(studentName + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "$$gradingReport.txt");
+                        File quizGradingReport = new File(studentName + "$$" + teacherName + "$$" +
+                                courseName + "$$" + Integer.toString(quizNumber) + "$$" +
+                                Integer.toString(attemptNumber + 1) + "$$gradingReport.txt");
                         quizGradingReport.createNewFile();
                         BufferedReader brGrading = new BufferedReader(new FileReader(quizGradingReport));
-                        PrintWriter pwGrading = new PrintWriter(new FileWriter(quizGradingReport), true);
+                        PrintWriter pwGrading = new PrintWriter(new FileWriter(quizGradingReport),
+                                true);
                         BufferedReader brGradingFrom = new BufferedReader(new FileReader(f468));
                         BufferedReader brGraded = new BufferedReader(new FileReader(studentAnswersOnly));
                         String checked = brGraded.readLine();
@@ -830,11 +895,10 @@ public class Student {
                     }
                 }
             } else if (quizIdentifier.contains("fill in the blanks")) {
+
             } else {
+
             }
         }
-
-
     }
-
 }
