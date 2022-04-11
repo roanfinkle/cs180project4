@@ -11,6 +11,7 @@ import java.util.Scanner;
  * @version April 04, 2022
  * Lab sec 03
  */
+
 public class Quiz {
     private int quizNumber;
     private int numOfQuestions;
