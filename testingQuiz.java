@@ -1,5 +1,18 @@
 import java.io.*;
 
+/**
+ * testingQuiz class to run test cases on each method 
+ * of Quiz.java, plese note that for testing purposes
+ * this classs should be run with testedQuiz.java(not Quiz.java)
+ * for the testing to be successful.
+ * Purdue University -- CS18000 -- Spring 2022 -- Project
+ * 4
+ *
+ * @author Ritwik Jain
+ * @version April 10, 2022
+ * Lab sec 03
+ */
+
 public class testingQuiz {
     public static void main(String[] args) throws IOException {
         String input1 = "Arithmetics\n" + "1\n" + "What is 1+1?\n"
