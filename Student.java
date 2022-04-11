@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.Scanner;
 
 /**
- * Student class to let the student attempt
+ * Student class to let the student attempt 
  * the quiz created in a particular course
  * Purdue University -- CS18000 -- Spring 2022 -- Project
  * 4
