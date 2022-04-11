@@ -1,4 +1,3 @@
-# cs180project4
 README:-
 
 The entire project is divided into 5 classes namely Runner.java, Student.java, Teacher.java, Courses.java and Quiz.java. The work distribution is as follows :
