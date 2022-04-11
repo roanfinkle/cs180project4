@@ -5,6 +5,17 @@ import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+/**
+ * Runner class to interact with the user via
+ * the terminal
+ * Purdue University -- CS18000 -- Spring 2022 -- Project
+ * 4
+ *
+ * @author Ritwik Jain
+ * @version April 04, 2022
+ * Lab sec 03
+ */
+
 public class Runner {
     public static void main(String[] args) throws IOException {
         do {
@@ -38,7 +49,8 @@ public class Runner {
                     do {
                         System.out.println("Student or teacher?");
                         category = sc.nextLine();
-                        if (category.toUpperCase().equals("STUDENT") || category.toUpperCase().equals("TEACHER")) {
+                        if (category.toUpperCase().equals("STUDENT")
+                                || category.toUpperCase().equals("TEACHER")) {
                             hjhj = true;
                         } else {
                             System.out.println("Invalid input");
@@ -65,7 +77,8 @@ public class Runner {
                             adder += logins + "\n";
                         }
                         if (alreadyRegistered) {
-                            System.out.println("You were already a registered user and have been directly logged in.");
+                            System.out.println("You were already a registered user " +
+                                    "and have been directly logged in.");
                             PrintWriter pen = new PrintWriter(new FileWriter(erty));
                             pen.print(adder);
                             pen.flush();
@@ -98,14 +111,16 @@ public class Runner {
                             System.out.println("You have been successfully registered");
                             looper = true;
                         } else {
-                            System.out.println("You were already a registered user and have been directly logged in.");
+                            System.out.println("You were already a registered " +
+                                    "user and have been directly logged in.");
                         }
                     }
                 } else {
                     do {
                         System.out.println("Student or teacher?");
                         category = sc.nextLine();
-                        if (category.toUpperCase().equals("STUDENT") || category.toUpperCase().equals("TEACHER")) {
+                        if (category.toUpperCase().equals("STUDENT")
+                                || category.toUpperCase().equals("TEACHER")) {
                             break;
                         } else {
                             System.out.println("Invalid input");
@@ -131,7 +146,8 @@ public class Runner {
                             adder += logins + "\n";
                         }
                         if (!alreadyRegistered) {
-                            System.out.println("name, username and password do not match any entries.");
+                            System.out.println("name, username and password do " +
+                                    "not match any entries.");
                             looper = false;
                         } else {
                             System.out.println("Logged in");
@@ -150,7 +166,8 @@ public class Runner {
                             adder += logins + "\n";
                         }
                         if (!alreadyRegistered) {
-                            System.out.println("name, username and password do not match any entries.");
+                            System.out.println("name, username and password " +
+                                    "do not match any entries.");
                             looper = false;
                         } else {
                             System.out.println("Logged in");
@@ -164,7 +181,8 @@ public class Runner {
                 if (alreadyRegistered) {
                     t = new Teacher(userName, password, name);
                 } else {
-                    t = new Teacher(userName, password, name, "teacherList.txt");
+                    t = new Teacher(userName, password, name,
+                            "teacherList.txt");
                 }
                 String courseListFileName = name + "$$" + userName + "$$" + password;
                 courseListFileName += "$$Courses.txt";
@@ -177,6 +195,7 @@ public class Runner {
                     System.out.println("2. Enter and edit a course");
                     System.out.println("3. Delete an existing course");
                     System.out.println("4. Log out");
+                    System.out.println("5. Delete account");
                     String teacherChoice = sc.nextLine();
                     switch (teacherChoice) {
                         case "1": {
@@ -197,7 +216,9 @@ public class Runner {
                             break;
                         }
                         case "2": {
-                            BufferedReader m = new BufferedReader(new FileReader(name + "$$" + userName + "$$" + password + "$$Courses.txt"));
+                            BufferedReader m = new BufferedReader(
+                                    new FileReader(name + "$$" +
+                                            userName + "$$" + password + "$$Courses.txt"));
                             String r = m.readLine();
                             while (r != null) {
                                 System.out.println(r);
@@ -250,7 +271,8 @@ public class Runner {
                                             boolean bn;
                                             String poolOrExact = "";
                                             do {
-                                                System.out.print("Do you want to add a pool of questions to randomly choose from or ");
+                                                System.out.print("Do you want to add a pool of " +
+                                                        "questions to randomly choose from or ");
                                                 System.out.println("the exact questions for the quiz?");
                                                 System.out.println("1. pool of questions\n2. exact questions");
                                                 choice90 = sc.nextLine();
@@ -304,9 +326,12 @@ public class Runner {
                                             } while (bn);
                                             boolean tyu = true;
                                             try {
-                                                File attempters = new File(name + "$$" + courseName + "$$" + quizNumber + "$$Attempters.txt");
+                                                File attempters = new File(name + "$$" +
+                                                        courseName + "$$" + quizNumber + "$$Attempters.txt");
                                                 attempters.createNewFile();
-                                                tyu = t.getListCourses().get(t.getListCourses().size() - 1).createQuiz(quizNumber, quizListFileName, numOfQuestions, type, poolOrExact, fileOrManually, randomize);
+                                                tyu = t.getListCourses().get(t.getListCourses().size() - 1)
+                                                        .createQuiz(quizNumber, quizListFileName, numOfQuestions,
+                                                                type, poolOrExact, fileOrManually, randomize);
                                             } catch (FileNotFoundException e) {
                                                 e.printStackTrace();
                                             } catch (IOException e) {
@@ -322,12 +347,15 @@ public class Runner {
                                                         String answerFilePath = sc.nextLine();
                                                         int n = t.getListCourses().size();
                                                         int size = t.getListCourses().get(n - 1).getListQuizzes().size();
-                                                        String quizFileName = name + "$$" + courseName + "$$" + Integer.toString(quizNumber) + ".txt";
-                                                        d = t.getListCourses().get(n - 1).getListQuizzes().get(size - 1).makePoolQuizFile(filePath, quizFileName, answerFilePath);
+                                                        String quizFileName = name + "$$" + courseName + "$$" + 
+                                                            Integer.toString(quizNumber) + ".txt";
+                                                        d = t.getListCourses().get(n - 1).getListQuizzes()
+                                                                .get(size - 1).makePoolQuizFile(filePath, quizFileName, answerFilePath);
                                                         if (d) {
                                                             System.out.println("The quiz was made successfully");
                                                         } else {
-                                                            System.out.println("Either the file was empty or the path was invalid. Please enter a valid path.");
+                                                            System.out.println("Either the file was empty or the " +
+                                                                    "path was invalid. Please enter a valid path.");
                                                         }
                                                     } while (!d);
                                                 } else if (choice90.equals("2") && choice89.equals("1")) {
@@ -339,19 +367,25 @@ public class Runner {
                                                         String answerFilePath = sc.nextLine();
                                                         int n = t.getListCourses().size();
                                                         int size = t.getListCourses().get(n - 1).getListQuizzes().size();
-                                                        String quizFileName = name + "$$" + courseName + "$$" + Integer.toString(quizNumber) + ".txt";
-                                                        d = t.getListCourses().get(n - 1).getListQuizzes().get(size - 1).makeExactQuizFile(filePath, quizFileName, answerFilePath);
+                                                        String quizFileName = name + "$$" + courseName
+                                                                + "$$" + Integer.toString(quizNumber) + ".txt";
+                                                        d = t.getListCourses().get(n - 1).getListQuizzes()
+                                                                .get(size - 1).makeExactQuizFile(filePath,
+                                                                        quizFileName, answerFilePath);
                                                         if (d) {
                                                             System.out.println("The quiz was made successfully");
                                                         } else {
-                                                            System.out.println("Either the file was empty or the path was invalid. Please enter a valid path.");
+                                                            System.out.println("Either the file was empty or " +
+                                                                    "the path was invalid. Please enter a valid path.");
                                                         }
                                                     } while (!d);
                                                 } else {
-                                                    String quizFileName = name + "$$" + courseName + "$$" + Integer.toString(quizNumber) + ".txt";
+                                                    String quizFileName = name + "$$" + courseName + "$$" +
+                                                            Integer.toString(quizNumber) + ".txt";
                                                     int n = t.getListCourses().size();
                                                     int size = t.getListCourses().get(n - 1).getListQuizzes().size();
-                                                    t.getListCourses().get(n - 1).getListQuizzes().get(size - 1).makeQuizManual(quizFileName, type);
+                                                    t.getListCourses().get(n - 1).getListQuizzes()
+                                                            .get(size - 1).makeQuizManual(quizFileName, type);
                                                 }
                                             } else {
                                                 System.out.println("The quiz has already been created");
@@ -361,7 +395,8 @@ public class Runner {
                                         }
                                         case "2": {
                                             String quizListFileName = name + "$$" + courseName + "$$quizList.txt";
-                                            BufferedReader mr = new BufferedReader(new FileReader(name + "$$" + courseName + "$$quizList.txt"));
+                                            BufferedReader mr = new BufferedReader(
+                                                    new FileReader(name + "$$" + courseName + "$$quizList.txt"));
                                             String rt = mr.readLine();
                                             while (rt != null) {
                                                 System.out.println(rt.substring(0, rt.indexOf("(")));
@@ -380,7 +415,8 @@ public class Runner {
                                                     sc.nextLine();
                                                 }
                                             } while (true);
-                                            if (t.getListCourses().get(t.getListCourses().size() - 1).enterQuiz(quizNumber, quizListFileName).equals("filepool")) {
+                                            if (t.getListCourses().get(t.getListCourses().size() - 1)
+                                                    .enterQuiz(quizNumber, quizListFileName).equals("filepool")) {
                                                 boolean d;
                                                 do {
                                                     System.out.println("Enter the file path");
@@ -389,15 +425,20 @@ public class Runner {
                                                     String answerFilePath = sc.nextLine();
                                                     int n = t.getListCourses().size();
                                                     int size = t.getListCourses().get(n - 1).getListQuizzes().size();
-                                                    String quizFileName = name + "$$" + courseName + "$$" + Integer.toString(quizNumber) + ".txt";
-                                                    d = t.getListCourses().get(n - 1).getListQuizzes().get(size - 1).makePoolQuizFile(filePath, quizFileName, answerFilePath);
+                                                    String quizFileName = name + "$$" + courseName
+                                                            + "$$" + Integer.toString(quizNumber) + ".txt";
+                                                    d = t.getListCourses().get(n - 1)
+                                                            .getListQuizzes().get(size - 1)
+                                                            .makePoolQuizFile(filePath, quizFileName, answerFilePath);
                                                     if (d) {
                                                         System.out.println("The quiz was made successfully");
                                                     } else {
-                                                        System.out.println("Either the file was empty or the path was invalid. Please enter a valid path.");
+                                                        System.out.println("Either the file was empty " +
+                                                                "or the path was invalid. Please enter a valid path.");
                                                     }
                                                 } while (!d);
-                                            } else if (t.getListCourses().get(t.getListCourses().size() - 1).enterQuiz(quizNumber, quizListFileName).equals("fileexact")) {
+                                            } else if (t.getListCourses().get(t.getListCourses().size() - 1)
+                                                    .enterQuiz(quizNumber, quizListFileName).equals("fileexact")) {
                                                 boolean d;
                                                 do {
                                                     System.out.println("Enter the file path");
@@ -406,47 +447,75 @@ public class Runner {
                                                     String answerFilePath = sc.nextLine();
                                                     int n = t.getListCourses().size();
                                                     int size = t.getListCourses().get(n - 1).getListQuizzes().size();
-                                                    String quizFileName = name + "$$" + courseName + "$$" + Integer.toString(quizNumber) + ".txt";
-                                                    d = t.getListCourses().get(n - 1).getListQuizzes().get(size - 1).makeExactQuizFile(filePath, quizFileName, answerFilePath);
+                                                    String quizFileName = name + "$$" + courseName +
+                                                            "$$" + Integer.toString(quizNumber) + ".txt";
+                                                    d = t.getListCourses().get(n - 1).getListQuizzes()
+                                                            .get(size - 1).makeExactQuizFile(filePath,
+                                                                    quizFileName, answerFilePath);
                                                     if (d) {
                                                         System.out.println("The quiz was made successfully");
                                                     } else {
-                                                        System.out.println("Either the file was empty or the path was invalid. Please enter a valid path.");
+                                                        System.out.println("Either the file was empty or " +
+                                                                "the path was invalid. Please enter a valid path.");
                                                     }
                                                 } while (!d);
-                                            } else if (t.getListCourses().get(t.getListCourses().size() - 1).enterQuiz(quizNumber, quizListFileName).contains("manualpool")) {
-                                                if (t.getListCourses().get(t.getListCourses().size() - 1).enterQuiz(quizNumber, quizListFileName).contains("MCQ")) {
-                                                    String quizFileName = name + "$$" + courseName + "$$" + Integer.toString(quizNumber) + ".txt";
+                                            } else if (t.getListCourses().get(t.getListCourses().size() - 1)
+                                                    .enterQuiz(quizNumber, quizListFileName).contains("manualpool")) {
+                                                if (t.getListCourses().get(t.getListCourses().size() - 1)
+                                                        .enterQuiz(quizNumber, quizListFileName).contains("MCQ")) {
+                                                    String quizFileName = name + "$$" + courseName +
+                                                            "$$" + Integer.toString(quizNumber) + ".txt";
+                                                    int n = t.getListCourses().size();
+                                                    int size = t.getListCourses().get(n - 1)
+                                                            .getListQuizzes().size();
+                                                    t.getListCourses().get(n - 1).getListQuizzes()
+                                                            .get(size - 1).makeQuizManual(quizFileName, "MCQ");
+                                                } else if (t.getListCourses().get(t.getListCourses()
+                                                                .size() - 1).enterQuiz(quizNumber, quizListFileName)
+                                                        .contains("fillintheblanks")) {
+                                                    String quizFileName = name + "$$" + courseName
+                                                            + "$$" + Integer.toString(quizNumber) + ".txt";
                                                     int n = t.getListCourses().size();
                                                     int size = t.getListCourses().get(n - 1).getListQuizzes().size();
-                                                    t.getListCourses().get(n - 1).getListQuizzes().get(size - 1).makeQuizManual(quizFileName, "MCQ");
-                                                } else if (t.getListCourses().get(t.getListCourses().size() - 1).enterQuiz(quizNumber, quizListFileName).contains("fillintheblanks")) {
-                                                    String quizFileName = name + "$$" + courseName + "$$" + Integer.toString(quizNumber) + ".txt";
-                                                    int n = t.getListCourses().size();
-                                                    int size = t.getListCourses().get(n - 1).getListQuizzes().size();
-                                                    t.getListCourses().get(n - 1).getListQuizzes().get(size - 1).makeQuizManual(quizFileName, "fill in the blanks");
+                                                    t.getListCourses().get(n - 1).getListQuizzes()
+                                                            .get(size - 1).makeQuizManual(quizFileName,
+                                                                    "fill in the blanks");
                                                 } else {
-                                                    String quizFileName = name + "$$" + courseName + "$$" + Integer.toString(quizNumber) + ".txt";
+                                                    String quizFileName = name + "$$" + courseName +
+                                                            "$$" + Integer.toString(quizNumber) + ".txt";
                                                     int n = t.getListCourses().size();
-                                                    int size = t.getListCourses().get(n - 1).getListQuizzes().size();
-                                                    t.getListCourses().get(n - 1).getListQuizzes().get(size - 1).makeQuizManual(quizFileName, "true/false");
+                                                    int size = t.getListCourses().get(n - 1)
+                                                            .getListQuizzes().size();
+                                                    t.getListCourses().get(n - 1).getListQuizzes()
+                                                            .get(size - 1).makeQuizManual(quizFileName, "true/false");
                                                 }
-                                            } else if (t.getListCourses().get(t.getListCourses().size() - 1).enterQuiz(quizNumber, quizListFileName).contains("manualexact")) {
-                                                if (t.getListCourses().get(t.getListCourses().size() - 1).enterQuiz(quizNumber, quizListFileName).contains("MCQ")) {
-                                                    String quizFileName = name + "$$" + courseName + "$$" + Integer.toString(quizNumber) + ".txt";
+                                            } else if (t.getListCourses().get(t.getListCourses().size() - 1)
+                                                    .enterQuiz(quizNumber, quizListFileName).contains("manualexact")) {
+                                                if (t.getListCourses().get(t.getListCourses().size() - 1)
+                                                        .enterQuiz(quizNumber, quizListFileName).contains("MCQ")) {
+                                                    String quizFileName = name + "$$" + courseName +
+                                                            "$$" + Integer.toString(quizNumber) + ".txt";
+                                                    int n = t.getListCourses().size();
+                                                    int size = t.getListCourses().get(n - 1)
+                                                            .getListQuizzes().size();
+                                                    t.getListCourses().get(n - 1).getListQuizzes()
+                                                            .get(size - 1).makeQuizManual(quizFileName, "MCQ");
+                                                } else if (t.getListCourses().get(t.getListCourses()
+                                                                .size() - 1).enterQuiz(quizNumber, quizListFileName)
+                                                        .contains("fillintheblanks")) {
+                                                    String quizFileName = name + "$$" + courseName
+                                                            + "$$" + Integer.toString(quizNumber) + ".txt";
                                                     int n = t.getListCourses().size();
                                                     int size = t.getListCourses().get(n - 1).getListQuizzes().size();
-                                                    t.getListCourses().get(n - 1).getListQuizzes().get(size - 1).makeQuizManual(quizFileName, "MCQ");
-                                                } else if (t.getListCourses().get(t.getListCourses().size() - 1).enterQuiz(quizNumber, quizListFileName).contains("fillintheblanks")) {
-                                                    String quizFileName = name + "$$" + courseName + "$$" + Integer.toString(quizNumber) + ".txt";
-                                                    int n = t.getListCourses().size();
-                                                    int size = t.getListCourses().get(n - 1).getListQuizzes().size();
-                                                    t.getListCourses().get(n - 1).getListQuizzes().get(size - 1).makeQuizManual(quizFileName, "fill in the blanks");
+                                                    t.getListCourses().get(n - 1).getListQuizzes()
+                                                            .get(size - 1).makeQuizManual(quizFileName, "fill in the blanks");
                                                 } else {
-                                                    String quizFileName = name + "$$" + courseName + "$$" + Integer.toString(quizNumber) + ".txt";
+                                                    String quizFileName = name + "$$" + courseName
+                                                            + "$$" + Integer.toString(quizNumber) + ".txt";
                                                     int n = t.getListCourses().size();
                                                     int size = t.getListCourses().get(n - 1).getListQuizzes().size();
-                                                    t.getListCourses().get(n - 1).getListQuizzes().get(size - 1).makeQuizManual(quizFileName, "true/false");
+                                                    t.getListCourses().get(n - 1).getListQuizzes()
+                                                            .get(size - 1).makeQuizManual(quizFileName, "true/false");
                                                 }
                                             } else {
                                                 System.out.println("This quiz has not been created yet");
@@ -493,7 +562,9 @@ public class Runner {
                                                 }
                                             } while (true);
                                             if (choice1.equals("1")) {
-                                                File ert = new File(studentName + "$$" + name + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber) + "$$gradingReport.txt");
+                                                File ert = new File(studentName + "$$" + name
+                                                        + "$$" + courseName + "$$" + Integer.toString(quizNumber)
+                                                        + "$$" + Integer.toString(attemptNumber) + "$$gradingReport.txt");
                                                 if (ert.exists()) {
                                                     BufferedReader bf = new BufferedReader(new FileReader(ert));
                                                     String printings = bf.readLine();
@@ -502,10 +573,13 @@ public class Runner {
                                                         printings = bf.readLine();
                                                     }
                                                 } else {
-                                                    System.out.println("This attempt for this quiz has not been completed yet");
+                                                    System.out.println("This attempt for this quiz " +
+                                                            "has not been completed yet");
                                                 }
                                             } else {
-                                                File ert = new File(studentName + "$$" + name + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber) + "$$submission.txt");
+                                                File ert = new File(studentName + "$$" + name
+                                                        + "$$" + courseName + "$$" + Integer.toString(quizNumber)
+                                                        + "$$" + Integer.toString(attemptNumber) + "$$submission.txt");
                                                 if (ert.exists()) {
                                                     BufferedReader bf = new BufferedReader(new FileReader(ert));
                                                     String printings = bf.readLine();
@@ -521,7 +595,8 @@ public class Runner {
                                             break;
                                         }
                                         case "4": {
-                                            BufferedReader bfu = new BufferedReader(new FileReader(name + "$$" + courseName + "$$quizList.txt"));
+                                            BufferedReader bfu = new BufferedReader(
+                                                    new FileReader(name + "$$" + courseName + "$$quizList.txt"));
                                             String ql = bfu.readLine();
                                             while (ql != null) {
                                                 System.out.println(ql.substring(0, ql.indexOf("(")));
@@ -548,9 +623,11 @@ public class Runner {
                                             StringBuilder appender = new StringBuilder();
                                             while (str != null) {
                                                 if (str.contains("Quiz" + Integer.toString(quizNumber))) {
-                                                    File fr = new File(name + "$$" + courseName + "$$" + quizNumber + ".txt");
+                                                    File fr = new File(name + "$$"
+                                                            + courseName + "$$" + quizNumber + ".txt");
                                                     fr.delete();
-                                                    File wer = new File(name + "$$" + courseName + "$$" + quizNumber + "$$Answers.txt");
+                                                    File wer = new File(name + "$$"
+                                                            + courseName + "$$" + quizNumber + "$$Answers.txt");
                                                     wer.delete();
                                                     c++;
                                                 } else {
@@ -594,7 +671,9 @@ public class Runner {
                             break;
                         }
                         case "3": {
-                            BufferedReader m = new BufferedReader(new FileReader(name + "$$" + userName + "$$" + password + "$$Courses.txt"));
+                            BufferedReader m = new BufferedReader(
+                                    new FileReader(name + "$$"
+                                            + userName + "$$" + password + "$$Courses.txt"));
                             String r = m.readLine();
                             while (r != null) {
                                 System.out.println(r);
@@ -603,7 +682,8 @@ public class Runner {
                             m.close();
                             System.out.println("Enter the Course name");
                             String str = sc.nextLine();
-                            File fr = new File(name + "$$" + userName + "$$" + password + "$$Courses.txt");
+                            File fr = new File(name + "$$"
+                                    + userName + "$$" + password + "$$Courses.txt");
                             fr.createNewFile();
                             BufferedReader rt = new BufferedReader(new FileReader(fr));
                             String ch = rt.readLine();
@@ -618,9 +698,11 @@ public class Runner {
                                     String str1 = bf.readLine();
                                     while (str1 != null) {
                                         int quizNumber = Integer.parseInt(str1.substring(4, str1.indexOf("(")));
-                                        File fr1 = new File(name + "$$" + str + "$$" + Integer.toString(quizNumber) + ".txt");
+                                        File fr1 = new File(name + "$$"
+                                                + str + "$$" + Integer.toString(quizNumber) + ".txt");
                                         fr1.delete();
-                                        File wer = new File(name + "$$" + str + "$$" + Integer.toString(quizNumber) + "$$Answers.txt");
+                                        File wer = new File(name + "$$"
+                                                + str + "$$" + Integer.toString(quizNumber) + "$$Answers.txt");
                                         wer.delete();
                                         str1 = bf.readLine();
                                     }
@@ -636,7 +718,8 @@ public class Runner {
                                 pwsd.flush();
                             } else {
                                 appender = new StringBuilder(appender.substring(0, appender.length() - 1));
-                                PrintWriter pwsd = new PrintWriter(new FileWriter(fr), true);
+                                PrintWriter pwsd = new PrintWriter(
+                                        new FileWriter(fr), true);
                                 pwsd.println(appender);
                                 pwsd.flush();
                             }
@@ -649,6 +732,26 @@ public class Runner {
                             break;
                         }
                         case "4": {
+                            a = true;
+                            break;
+                        }
+                        case "5": {
+                            BufferedReader ret = new BufferedReader(
+                                    new FileReader("teacherList.txt"));
+                            String las = ret.readLine();
+                            String sal = "";
+                            while (las != null) {
+                                if (!(las.equals(name + "$$" + userName + "$$" + password))) {
+                                    sal += las + '\n';
+                                }
+                                las = ret.readLine();
+                            }
+                            ret.close();
+                            PrintWriter pq = new PrintWriter(
+                                    new FileWriter("teacherList.txt"), true);
+                            pq.print(sal);
+                            pq.flush();
+                            pq.close();
                             a = true;
                             break;
                         }
@@ -692,11 +795,17 @@ public class Runner {
                             contents = bred.readLine();
                         }
                         attemptNumber--;
-                        File sft = new File(name + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "$$submission.txt");
+                        File sft = new File(name + "$$" + teacherName
+                                + "$$" + courseName + "$$" + Integer.toString(quizNumber)
+                                + "$$" + Integer.toString(attemptNumber + 1) + "$$submission.txt");
                         sft.createNewFile();
-                        File studentAnswersOnly = new File(name + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "$$submittedAnswers.txt");
+                        File studentAnswersOnly = new File(name + "$$"
+                                + teacherName + "$$" + courseName + "$$"
+                                + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1)
+                                + "$$submittedAnswers.txt");
                         studentAnswersOnly.createNewFile();
-                        BufferedReader readStudentAnswersOnly = new BufferedReader(new FileReader(studentAnswersOnly));
+                        BufferedReader readStudentAnswersOnly = new BufferedReader(
+                                new FileReader(studentAnswersOnly));
                         BufferedReader readsft = new BufferedReader(new FileReader(sft));
                         String temporaries = readsft.readLine();
                         StringBuilder a1 = new StringBuilder();
@@ -715,10 +824,13 @@ public class Runner {
                             temporaries1 = readStudentAnswersOnly.readLine();
                         }
                         a2 = new StringBuilder(a2.substring(0, a2.length() - 1));
-                        PrintWriter pwStudentAnswersOnly = new PrintWriter(new FileWriter(studentAnswersOnly), true);
+                        PrintWriter pwStudentAnswersOnly = new PrintWriter(
+                                new FileWriter(studentAnswersOnly), true);
                         pwStudentAnswersOnly.println(a2);
                         pwStudentAnswersOnly.flush();
-                        File f457 = new File(name + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "formQuiz.txt");
+                        File f457 = new File(name + "$$"
+                                + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber)
+                                + "$$" + Integer.toString(attemptNumber + 1) + "formQuiz.txt");
                         f457.createNewFile();
                         BufferedReader read = new BufferedReader(new FileReader(f457));
                         String quizStarting = read.readLine();
@@ -743,7 +855,8 @@ public class Runner {
                                         String responseFilePath = sc.nextLine();
                                         File fresponse = new File(responseFilePath);
                                         if (fresponse.length() == 0) {
-                                            System.out.println("The file does not exist or is empty. Please enter a valid file path");
+                                            System.out.println("The file does not exist or " +
+                                                    "is empty. Please enter a valid file path");
                                         } else {
                                             BufferedReader re = new BufferedReader(new FileReader(fresponse));
                                             String answer = re.readLine();
@@ -755,7 +868,9 @@ public class Runner {
                                             while (readings != null) {
                                                 cf++;
                                                 if (cf == 1) {
-                                                    appendingString += String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d", teacherName, courseName, quizNumber, attemptNumber + 1, counterAgain) + "\n";
+                                                    appendingString += String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d",
+                                                            teacherName, courseName, quizNumber,
+                                                            attemptNumber + 1, counterAgain) + "\n";
 
                                                 } else {
                                                     appendingString += readings + "\n";
@@ -776,7 +891,8 @@ public class Runner {
                                         do {
                                             System.out.println("Enter the answer");
                                             answer = sc.nextLine();
-                                            if (answer.equals("A") || answer.equals("B") || answer.equals("C") || answer.equals("D")) {
+                                            if (answer.equals("A") || answer.equals("B")
+                                                    || answer.equals("C") || answer.equals("D")) {
                                                 break;
                                             } else {
                                                 System.out.println("The answer should be either A, B, C or D");
@@ -790,7 +906,9 @@ public class Runner {
                                         while (readings != null) {
                                             cf++;
                                             if (cf == 1) {
-                                                appendingString += String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d", teacherName, courseName, quizNumber, attemptNumber + 1, counterAgain) + "\n";
+                                                appendingString += String.format("%s@%s@qn-%d@attemptno-%d@qtsf-%d",
+                                                        teacherName, courseName, quizNumber,
+                                                        attemptNumber + 1, counterAgain) + "\n";
                                             } else {
                                                 appendingString += readings + "\n";
                                             }
@@ -816,14 +934,22 @@ public class Runner {
                         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         pwsft.println(formatter.format(ts));
                         System.out.println("This quiz is over and is being submitted");
-                        File quizGradingReport = new File(name + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "$$gradingReport.txt");
+                        File quizGradingReport = new File(name + "$$"
+                                + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber)
+                                + "$$" + Integer.toString(attemptNumber + 1) + "$$gradingReport.txt");
                         quizGradingReport.createNewFile();
-                        BufferedReader brGrading = new BufferedReader(new FileReader(quizGradingReport));
-                        PrintWriter pwGrading = new PrintWriter(new FileWriter(quizGradingReport), true);
-                        File f468 = new File(name + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber + 1) + "Solutions.txt");
+                        BufferedReader brGrading = new BufferedReader(
+                                new FileReader(quizGradingReport));
+                        PrintWriter pwGrading = new PrintWriter(
+                                new FileWriter(quizGradingReport), true);
+                        File f468 = new File(name + "$$"
+                                + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber)
+                                + "$$" + Integer.toString(attemptNumber + 1) + "Solutions.txt");
                         f468.createNewFile();
-                        BufferedReader brGradingFrom = new BufferedReader(new FileReader(f468));
-                        BufferedReader brGraded = new BufferedReader(new FileReader(studentAnswersOnly));
+                        BufferedReader brGradingFrom = new BufferedReader(
+                                new FileReader(f468));
+                        BufferedReader brGraded = new BufferedReader(
+                                new FileReader(studentAnswersOnly));
                         String checked = brGraded.readLine();
                         String checker = brGradingFrom.readLine();
                         int d = 0;
@@ -831,17 +957,20 @@ public class Runner {
                         while (checked != null) {
                             d++;
                             if (checked.equals(checker.substring(checker.indexOf(" ") + 1))) {
-                                pwGrading.println(String.format("Question %d - correct - %d points", d, 2));
+                                pwGrading.println(String.format("Question %d - " +
+                                        "correct - %d points", d, 2));
                                 totalPoints += 2;
                             } else {
-                                pwGrading.println(String.format("Question %d - wrong - %d points", d, 0));
+                                pwGrading.println(String.format("Question %d - " +
+                                        "wrong - %d points", d, 0));
                             }
                             checked = brGraded.readLine();
                             checker = brGradingFrom.readLine();
                         }
                         pwStudentAnswersOnly.println(formatter.format(ts));
                         pwGrading.println("total points - " + totalPoints);
-                        File f1 = new File(name + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$AttemptTracker.txt");
+                        File f1 = new File(name + "$$" + teacherName + "$$"
+                                + courseName + "$$" + Integer.toString(quizNumber) + "$$AttemptTracker.txt");
                         PrintWriter pw901 = new PrintWriter(new FileWriter(f1), true);
                         pw901.println(Integer.toString(attemptNumber + 1));
                         pw901.flush();
@@ -849,12 +978,14 @@ public class Runner {
                         System.out.println("Choose from the following options.");
                         System.out.println("1. Enter a course");
                         System.out.println("2. Log out");
+                        System.out.println("3. Delete account");
                         String studentChoice = sc.nextLine();
                         switch (studentChoice) {
                             case "1": {
                                 System.out.println("Enter the name of the teacher");
                                 String teacherName = sc.nextLine();
-                                BufferedReader bg = new BufferedReader(new FileReader(new File("teacherList.txt")));
+                                BufferedReader bg = new BufferedReader(
+                                        new FileReader(new File("teacherList.txt")));
                                 String findTeacher = bg.readLine();
                                 if (findTeacher == null) {
                                     System.out.println("No teacher is registered yet. Please Log out.");
@@ -862,7 +993,8 @@ public class Runner {
                                     int c = 0;
                                     while (findTeacher != null) {
                                         if (!findTeacher.equals("null")) {
-                                            if (findTeacher.substring(0, findTeacher.indexOf("$")).toUpperCase().equals(teacherName.toUpperCase())) {
+                                            if (findTeacher.substring(0, findTeacher.indexOf("$"))
+                                                    .toUpperCase().equals(teacherName.toUpperCase())) {
                                                 c++;
                                             }
                                         }
@@ -887,7 +1019,9 @@ public class Runner {
                                                 String choice57 = sc.nextLine();
                                                 switch (choice57) {
                                                     case "1": {
-                                                        BufferedReader gyt = new BufferedReader(new FileReader(teacherName + "$$" + courseName + "$$quizList.txt"));
+                                                        BufferedReader gyt = new BufferedReader(
+                                                                new FileReader(teacherName +
+                                                                        "$$" + courseName + "$$quizList.txt"));
                                                         String x = gyt.readLine();
                                                         while (x != null) {
                                                             System.out.println(x.substring(0, x.indexOf("(")));
@@ -912,17 +1046,22 @@ public class Runner {
                                                         String searching = br45.readLine();
                                                         while (searching != null) {
                                                             if (searching.contains("Quiz" + Integer.toString(choice90))) {
-                                                                c++;
+                                                                counter++;
                                                                 quizIdentifier = searching;
                                                             }
                                                             searching = br45.readLine();
                                                         }
-                                                        if (c == 0) {
+                                                        if (counter == 0) {
                                                             System.out.println("This quiz does not exist");
                                                         } else {
-                                                            BufferedReader br739 = new BufferedReader((new FileReader(teacherName + "$$" + courseName + "$$" + choice90 + ".txt")));
+                                                            BufferedReader br739 = new BufferedReader((
+                                                                    new FileReader(teacherName +
+                                                                            "$$" + courseName + "$$" + choice90 + ".txt")));
                                                             String copier = br739.readLine();
-                                                            int noOfQuestionsRequired = Integer.parseInt(quizIdentifier.substring(quizIdentifier.indexOf('(') + 1, quizIdentifier.indexOf(')', quizIdentifier.indexOf('(') + 1)));
+                                                            int noOfQuestionsRequired = Integer.parseInt(quizIdentifier
+                                                                    .substring(quizIdentifier.indexOf('(') + 1,
+                                                                            quizIdentifier.indexOf(')',
+                                                                                    quizIdentifier.indexOf('(') + 1)));
                                                             int c34 = -1;
                                                             while (copier != null) {
                                                                 c34++;
@@ -931,8 +1070,10 @@ public class Runner {
                                                             if (c34 % 5 == 0) {
                                                                 if (quizIdentifier.contains("pool")) {
                                                                     if ((c34 / 5) >= 5) {
-                                                                        String s = quizIdentifier.substring(quizIdentifier.indexOf(')', quizIdentifier.indexOf('(') + 1));
-                                                                        quizIdentifier = quizIdentifier.substring(0, quizIdentifier.indexOf('(') + 1) + Integer.toString(c34 / 5) + s;
+                                                                        String s = quizIdentifier.substring(quizIdentifier
+                                                                                .indexOf(')', quizIdentifier.indexOf('(') + 1));
+                                                                        quizIdentifier = quizIdentifier.substring(0, quizIdentifier
+                                                                                .indexOf('(') + 1) + Integer.toString(c34 / 5) + s;
                                                                         Student student = new Student();
                                                                         student.takeQuiz(name, teacherName, courseName, choice90, quizIdentifier);
                                                                     } else {
@@ -940,8 +1081,10 @@ public class Runner {
                                                                     }
                                                                 } else if (quizIdentifier.contains("exact")) {
                                                                     if ((c34 / 5) >= noOfQuestionsRequired) {
-                                                                        String s = quizIdentifier.substring(quizIdentifier.indexOf(')', quizIdentifier.indexOf('(') + 1));
-                                                                        quizIdentifier = quizIdentifier.substring(0, quizIdentifier.indexOf('(') + 1) + Integer.toString(c34 / 5) + s;
+                                                                        String s = quizIdentifier.substring(quizIdentifier
+                                                                                .indexOf(')', quizIdentifier.indexOf('(') + 1));
+                                                                        quizIdentifier = quizIdentifier.substring(0, quizIdentifier
+                                                                                .indexOf('(') + 1) + Integer.toString(c34 / 5) + s;
                                                                         Student student = new Student();
                                                                         student.takeQuiz(name, teacherName, courseName, choice90, quizIdentifier);
                                                                     } else {
@@ -980,7 +1123,9 @@ public class Runner {
                                                                 sc.nextLine();
                                                             }
                                                         } while (true);
-                                                        File ert = new File(name + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber) + "$$submission.txt");
+                                                        File ert = new File(name + "$$" + teacherName +
+                                                                "$$" + courseName + "$$" + Integer.toString(quizNumber) +
+                                                                "$$" + Integer.toString(attemptNumber) + "$$submission.txt");
                                                         if (ert.exists()) {
                                                             BufferedReader bf = new BufferedReader(new FileReader(ert));
                                                             String printings = bf.readLine();
@@ -989,7 +1134,8 @@ public class Runner {
                                                                 printings = bf.readLine();
                                                             }
                                                         } else {
-                                                            System.out.println("This attempt for this quiz has not been completed yet or the quiz has not been attempted at all.");
+                                                            System.out.println("This attempt for this quiz has not been " +
+                                                                    "completed yet or the quiz has not been attempted at all.");
                                                         }
                                                         ki = false;
                                                         break;
@@ -1019,7 +1165,9 @@ public class Runner {
                                                                 sc.nextLine();
                                                             }
                                                         } while (true);
-                                                        File ert = new File(name + "$$" + teacherName + "$$" + courseName + "$$" + Integer.toString(quizNumber) + "$$" + Integer.toString(attemptNumber) + "$$gradingReport.txt");
+                                                        File ert = new File(name + "$$" + teacherName +
+                                                                "$$" + courseName + "$$" + Integer.toString(quizNumber) +
+                                                                "$$" + Integer.toString(attemptNumber) + "$$gradingReport.txt");
                                                         if (ert.exists()) {
                                                             BufferedReader bf = new BufferedReader(new FileReader(ert));
                                                             String printings = bf.readLine();
@@ -1028,7 +1176,8 @@ public class Runner {
                                                                 printings = bf.readLine();
                                                             }
                                                         } else {
-                                                            System.out.println("This attempt for this quiz has not been completed yet or the quiz has not been attempted at all.");
+                                                            System.out.println("This attempt for this quiz has not " +
+                                                                    "been completed yet or the quiz has not been attempted at all.");
                                                         }
                                                         ki = false;
                                                         break;
@@ -1051,6 +1200,26 @@ public class Runner {
                                 break;
                             }
                             case "2": {
+                                lm = true;
+                                break;
+                            }
+                            case "3": {
+                                BufferedReader ret = new BufferedReader(
+                                        new FileReader("studentList.txt"));
+                                String las = ret.readLine();
+                                String sal = "";
+                                while (las != null) {
+                                    if (!(las.equals(name + "$$" + userName + "$$" + password))) {
+                                        sal += las + '\n';
+                                    }
+                                    las = ret.readLine();
+                                }
+                                ret.close();
+                                PrintWriter pq = new PrintWriter(
+                                        new FileWriter("studentList.txt"), true);
+                                pq.print(sal);
+                                pq.flush();
+                                pq.close();
                                 lm = true;
                                 break;
                             }
