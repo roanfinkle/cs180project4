@@ -2,8 +2,8 @@ import java.io.*;
 
 /**
  * testingQuiz class to run test cases on each method 
- * of Quiz.java, plese note that for testing purposes
- * this classs should be run with testedQuiz.java(not Quiz.java)
+ * of Quiz.java, please note that for testing purposes
+ * this class should be run with testedQuiz.java(not Quiz.java)
  * for the testing to be successful.
  * Purdue University -- CS18000 -- Spring 2022 -- Project
  * 4
