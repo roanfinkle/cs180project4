@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+
 /**
  * Teacher class to create new Teachers and 
  * enabke them to create and enter courses
@@ -10,6 +11,7 @@ import java.util.ArrayList;
  * @version April 04, 2022
  * Lab sec 03
  */
+
 public class Teacher {
     private String userName;
     private String password;
