@@ -35,7 +35,6 @@ public class Student {
         int attemptNumber = Integer.parseInt(br92.readLine());
         int noOfQuestions = Integer.parseInt(quizIdentifier.substring(quizIdentifier.indexOf('(') + 1,
                 quizIdentifier.indexOf(')', quizIdentifier.indexOf('(') + 1)));
-        System.out.println(noOfQuestions);
         String[][] questionArray = new String[noOfQuestions][6];
         String[][] questionArray1 = new String[noOfQuestions][6];
         String[][] questionArray2 = new String[noOfQuestions][6];
