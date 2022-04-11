@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+
 /**
  * Courses class to manage Courses created 
  * Purdue University -- CS18000 -- Spring 2022 -- Project
@@ -9,6 +10,7 @@ import java.util.ArrayList;
  * @version April 04, 2022
  * Lab sec 03
  */
+
 public class Courses {
     private String courseName;
     private ArrayList<Quiz> quizList = new ArrayList<>();
