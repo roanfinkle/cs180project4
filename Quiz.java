@@ -6,8 +6,9 @@ public class Quiz {
     private int quizNumber;
     private int numOfQuestions;
 
-    public Quiz(int quizNumber, String quizListFileName, int numOfQuestions, String type, String poolOrExact,
-            String fileOrManually, boolean randomize) throws IOException {
+    public Quiz(int quizNumber, String quizListFileName, int numOfQuestions,
+                String type, String poolOrExact, String fileOrManually,
+                boolean randomize) throws IOException {
         this.quizNumber = quizNumber;
         this.numOfQuestions = numOfQuestions;
         File f = new File(quizListFileName);
@@ -18,7 +19,6 @@ public class Quiz {
             s += str + "\n";
             str = br.readLine();
         }
-        br.close();
         s += "Quiz" + Integer.toString(quizNumber) + "(";
         s += Integer.toString(numOfQuestions) + ")" + "(" + type + ")";
         s += "(" + poolOrExact + ")" + "(" + fileOrManually + ")";
@@ -33,7 +33,8 @@ public class Quiz {
         this.quizNumber = quizNumber;
     }
 
-    public boolean makePoolQuizFile(String filePath, String quizFileName, String answerFilePath) {
+    public boolean makePoolQuizFile(String filePath, String quizFileName,
+                                    String answerFilePath) {
         try {
             File f1 = new File(filePath);
             BufferedReader br = new BufferedReader(new FileReader(f1));
@@ -42,8 +43,6 @@ public class Quiz {
             BufferedReader br7 = new BufferedReader(new FileReader(f7));
             String str7 = br7.readLine();
             if (str == null || str7 == null) {
-                br.close();
-                br7.close();
                 return false;
             } else {
                 String s = "";
@@ -56,11 +55,10 @@ public class Quiz {
                     temp += str7 + "\n";
                     str7 = br7.readLine();
                 }
-                br.close();
-                br7.close();
                 File f2 = new File(quizFileName);
                 f2.createNewFile();
-                File f67 = new File(quizFileName.substring(0, quizFileName.indexOf('.')) + "$$Answers.txt");
+                File f67 = new File(quizFileName.substring(0, quizFileName.indexOf('.')) +
+                        "$$Answers.txt");
                 f67.createNewFile();
                 PrintWriter pw456 = new PrintWriter(new FileWriter(f67), true);
                 pw456.print(temp);
@@ -76,7 +74,8 @@ public class Quiz {
         }
     }
 
-    public boolean makeExactQuizFile(String filePath, String quizFileName, String answerFilePath) {
+    public boolean makeExactQuizFile(String filePath, String quizFileName,
+                                     String answerFilePath) {
         try {
             File f1 = new File(filePath);
             BufferedReader br = new BufferedReader(new FileReader(f1));
@@ -84,9 +83,8 @@ public class Quiz {
             File f7 = new File(answerFilePath);
             BufferedReader br7 = new BufferedReader(new FileReader(f7));
             String str7 = br7.readLine();
+            String returnValue;
             if (str == null || str7 == null) {
-                br.close();
-                br7.close();
                 return false;
             } else {
                 String s = "";
@@ -99,11 +97,10 @@ public class Quiz {
                     temp += str7 + "\n";
                     str7 = br7.readLine();
                 }
-                br.close();
-                br7.close();
                 File f2 = new File(quizFileName);
                 f2.createNewFile();
-                File f67 = new File(quizFileName.substring(0, quizFileName.indexOf('.')) + "$$Answers.txt");
+                File f67 = new File(quizFileName.substring(0, quizFileName.indexOf('.')) +
+                        "$$Answers.txt");
                 f67.createNewFile();
                 PrintWriter pw456 = new PrintWriter(new FileWriter(f67), true);
                 pw456.print(temp);
@@ -121,10 +118,12 @@ public class Quiz {
         }
     }
 
-    public void makeQuizManual(String quizFileName, String type) throws IOException {
+    public void makeQuizManual(String quizFileName,
+                               String type) throws IOException {
         File f2 = new File(quizFileName);
         f2.createNewFile();
-        File f3 = new File(quizFileName.substring(0, quizFileName.indexOf('.')) + "$$Answers.txt");
+        File f3 = new File(quizFileName.substring(0, quizFileName.indexOf('.')) +
+                "$$Answers.txt");
         f3.createNewFile();
         BufferedReader br = new BufferedReader(new FileReader(f2));
         String str = br.readLine();
@@ -140,13 +139,13 @@ public class Quiz {
             l += line + "\n";
             line = br5.readLine();
         }
-        br.close();
-        br5.close();
+
+        PrintWriter pw3 = new PrintWriter(new FileWriter(f3), true);
         Scanner sc = new Scanner(System.in);
         if (type.equals("MCQ")) {
             if (s.equals("") || s == null) {
                 int questionNumber = 0;
-                System.out.println("Enter the Quiz Title:");
+                System.out.println("Enter the title of the quiz");
                 String title = sc.nextLine();
                 s += title + '\n';
                 PrintWriter pw = new PrintWriter(new FileWriter(f2), true);
@@ -156,50 +155,51 @@ public class Quiz {
                     String option;
                     boolean h;
                     do {
-                        System.out.println("Do you want to create a question?\n1. yes\n2. no");
+                        System.out.println("Do you want to enter a question statement?\n1. yes\n2. no");
                         option = sc.nextLine();
                         if (!(option.equals("1") || option.equals("2"))) {
-                            System.out.println("Enter a valid option!");
+                            System.out.println("Enter a valid option");
                             h = false;
                         } else {
                             h = true;
                         }
                     } while (!h);
                     if (option.equals("1")) {
-                        System.out.println("Enter the question statement:");
+                        System.out.println("Enter the question statement");
                         String qs = sc.nextLine();
                         questionNumber++;
                         String answerChoices;
                         s += Integer.toString(questionNumber) + ". " + qs + '\n';
                         pw.println(Integer.toString(questionNumber) + ". " + qs);
-                        pw.close();
                         for (int cn = 1; cn <= 4; cn++) {
                             if (cn == 1) {
-                                System.out.println("Enter the first answer choice:");
+                                System.out.println("Enter the first choice");
                                 answerChoices = sc.nextLine();
                                 s += "A) " + answerChoices + '\n';
                                 PrintWriter pw1 = new PrintWriter(new FileWriter(f2), true);
                                 pw1.print(s);
                                 pw1.close();
                             } else if (cn == 2) {
-                                System.out.println("Enter the second answer choice:");
+                                System.out.println("Enter the second option");
                                 answerChoices = sc.nextLine();
                                 s += "B) " + answerChoices + '\n';
                                 PrintWriter pw1 = new PrintWriter(new FileWriter(f2), true);
                                 pw1.print(s);
                                 pw1.close();
                             } else if (cn == 3) {
-                                System.out.println("Enter the third answer choice:");
+                                System.out.println("Enter the third option");
                                 answerChoices = sc.nextLine();
                                 s += "C) " + answerChoices + '\n';
                                 PrintWriter pw1 = new PrintWriter(new FileWriter(f2), true);
                                 pw1.print(s);
                                 pw1.close();
                             } else {
-                                System.out.println("Enter the fourth answer choice:");
+                                System.out.println("Enter the fourth option and then the answer to this question");
+                                System.out.println("Enter the fourth option");
                                 answerChoices = sc.nextLine();
-                                System.out.println(
-                                    "Enter the correct answer as either A, B, C or D. The option will be added to the quiz only after the the answer is entered.");
+                                System.out.println("Enter the answer as either A, B, C or D. " +
+                                        "The option will be added to the quiz only after the the " +
+                                        "answer is entered.");
                                 String answer;
                                 do {
                                     answer = sc.nextLine();
@@ -207,7 +207,7 @@ public class Quiz {
                                             || answer.equals("D")) {
                                         break;
                                     } else {
-                                        System.out.println("Enter a valid answer!");
+                                        System.out.println("Enter a valid answer.");
                                     }
                                 } while (true);
                                 s += "D) " + answerChoices + '\n';
@@ -237,7 +237,7 @@ public class Quiz {
                     String option6 = sc.nextLine();
                     switch (option6) {
                         case "1": {
-                            System.out.println("Enter the new quiz title:");
+                            System.out.println("Enter the new title");
                             String newTitle = sc.nextLine();
                             s = s.substring(s.indexOf('\n'));
                             s = newTitle + s;
@@ -256,38 +256,39 @@ public class Quiz {
                                 numLines++;
                                 linesCounter = frgt.readLine();
                             }
-                            frgt.close();
                             if (numLines % 5 == 1) {
-                                System.out.println("Enter the four answer choices for question number "
-                                        + Integer.toString(numLines / 5 + 1));
+                                System.out.println("Enter the four options for question number " +
+                                        Integer.toString(numLines / 5 + 1));
                                 for (int cn = 1; cn <= 4; cn++) {
                                     String answerChoices;
                                     if (cn == 1) {
-                                        System.out.println("Enter the first answer choice:");
+                                        System.out.println("Enter the first choice");
                                         answerChoices = sc.nextLine();
                                         s += "A) " + answerChoices + '\n';
                                         PrintWriter pw1 = new PrintWriter(new FileWriter(f2), true);
                                         pw1.print(s);
                                         pw1.close();
                                     } else if (cn == 2) {
-                                        System.out.println("Enter the second answer choice:");
+                                        System.out.println("Enter the second option");
                                         answerChoices = sc.nextLine();
                                         s += "B) " + answerChoices + '\n';
                                         PrintWriter pw1 = new PrintWriter(new FileWriter(f2), true);
                                         pw1.print(s);
                                         pw1.close();
                                     } else if (cn == 3) {
-                                        System.out.println("Enter the third answer choice:");
+                                        System.out.println("Enter the third option");
                                         answerChoices = sc.nextLine();
                                         s += "C) " + answerChoices + '\n';
                                         PrintWriter pw1 = new PrintWriter(new FileWriter(f2), true);
                                         pw1.print(s);
                                         pw1.close();
                                     } else {
-                                        System.out.println("Enter the fourth answer choice:");
+                                        System.out.println("Enter the fourth option and then the " +
+                                                "answer to this question");
+                                        System.out.println("Enter the fourth option");
                                         answerChoices = sc.nextLine();
-                                        System.out.println(
-                                            "Enter the correct answer as either A, B, C or D. The option will be added to the quiz only after the the answer is entered.");
+                                        System.out.println("Enter the answer. The option will be added to the quiz " +
+                                                "only after the the answer is entered.");
                                         String answer;
                                         do {
                                             answer = sc.nextLine();
@@ -309,42 +310,43 @@ public class Quiz {
                                     }
                                 }
                             } else if (numLines % 5 == 0) {
-                                System.out.println("Enter the question and four answer choices for question number "
-                                        + Integer.toString(numLines / 5 + 1));
-                                System.out.println("Enter the question statement:");
+                                System.out.println("Enter the question and four options for question number " +
+                                        Integer.toString(numLines / 5 + 1));
+                                System.out.println("Enter the question statement");
                                 String qs = sc.nextLine();
                                 s += Integer.toString(numLines / 5 + 1) + ". " + qs + '\n';
                                 PrintWriter pw = new PrintWriter(new FileWriter(f2), true);
                                 pw.println(Integer.toString(numLines / 5 + 1) + ". " + qs);
-                                pw.close();
                                 for (int cn = 1; cn <= 4; cn++) {
                                     String answerChoices;
                                     if (cn == 1) {
-                                        System.out.println("Enter the first answer choice:");
+                                        System.out.println("Enter the first choice");
                                         answerChoices = sc.nextLine();
                                         s += "A) " + answerChoices + '\n';
                                         PrintWriter pw1 = new PrintWriter(new FileWriter(f2), true);
                                         pw1.print(s);
                                         pw1.close();
                                     } else if (cn == 2) {
-                                        System.out.println("Enter the second answer choice:");
+                                        System.out.println("Enter the second option");
                                         answerChoices = sc.nextLine();
                                         s += "B) " + answerChoices + '\n';
                                         PrintWriter pw1 = new PrintWriter(new FileWriter(f2), true);
                                         pw1.print(s);
                                         pw1.close();
                                     } else if (cn == 3) {
-                                        System.out.println("Enter the third answer choice:");
+                                        System.out.println("Enter the third option");
                                         answerChoices = sc.nextLine();
                                         s += "C) " + answerChoices + '\n';
                                         PrintWriter pw1 = new PrintWriter(new FileWriter(f2), true);
                                         pw1.print(s);
                                         pw1.close();
                                     } else {
-                                        System.out.println("Enter the fourth answer choice:");
+                                        System.out.println("Enter the fourth option and then the " +
+                                                "answer to this question");
+                                        System.out.println("Enter the fourth option");
                                         answerChoices = sc.nextLine();
-                                        System.out.println(
-                                            "Enter the correct answer as either A, B, C or D. The option will be added to the quiz only after the the answer is entered.");
+                                        System.out.println("Enter the answer. The option will be added to " +
+                                                "the quiz only after the the answer is entered.");
                                         String answer;
                                         do {
                                             answer = sc.nextLine();
@@ -366,36 +368,38 @@ public class Quiz {
                                     }
                                 }
                             } else {
-                                System.out.println(
-                                        "Enter the answer choices for question number " + Integer.toString(numLines / 5 + 1));
+                                System.out.println("Enter the options for question number " +
+                                        Integer.toString(numLines / 5 + 1));
                                 for (int cn = numLines % 5; cn <= 4; cn++) {
                                     String answerChoices;
                                     if (cn == 1) {
-                                        System.out.println("Enter the first answer choice:");
+                                        System.out.println("Enter the first choice");
                                         answerChoices = sc.nextLine();
                                         s += "A) " + answerChoices + '\n';
                                         PrintWriter pw1 = new PrintWriter(new FileWriter(f2), true);
                                         pw1.print(s);
                                         pw1.close();
                                     } else if (cn == 2) {
-                                        System.out.println("Enter the second answer choice:");
+                                        System.out.println("Enter the second option");
                                         answerChoices = sc.nextLine();
                                         s += "B) " + answerChoices + '\n';
                                         PrintWriter pw1 = new PrintWriter(new FileWriter(f2), true);
                                         pw1.print(s);
                                         pw1.close();
                                     } else if (cn == 3) {
-                                        System.out.println("Enter the third answer choice:");
+                                        System.out.println("Enter the third option");
                                         answerChoices = sc.nextLine();
                                         s += "C) " + answerChoices + '\n';
                                         PrintWriter pw1 = new PrintWriter(new FileWriter(f2), true);
                                         pw1.print(s);
                                         pw1.close();
                                     } else {
-                                        System.out.println("Enter the fourth answer choice:");
+                                        System.out.println("Enter the fourth option and then the answer to " +
+                                                "this question");
+                                        System.out.println("Enter the fourth option");
                                         answerChoices = sc.nextLine();
-                                        System.out.println(
-                                            "Enter the correct answer as either A, B, C or D. The option will be added to the quiz only after the the answer is entered.");
+                                        System.out.println("Enter the answer. The option will be added to the " +
+                                                "quiz only after the the answer is entered.");
                                         String answer;
                                         do {
                                             answer = sc.nextLine();
@@ -430,7 +434,7 @@ public class Quiz {
                             bf.close();
                             int dqn;
                             do {
-                                System.out.println("Enter the question number to be deleted:");
+                                System.out.println("Enter the question number to be deleted.");
                                 try {
                                     dqn = sc.nextInt();
                                     sc.nextLine();
@@ -460,7 +464,6 @@ public class Quiz {
                                     pw1.close();
                                     BufferedReader vf = new BufferedReader(new FileReader(f2));
                                     s1 = vf.readLine();
-                                    vf.close();
                                     int ct = -1;
                                     while (s1 != null) {
                                         ct++;
@@ -500,7 +503,7 @@ public class Quiz {
                                 PrintWriter pw45 = new PrintWriter(new FileWriter(f3), true);
                                 pw45.print(l);
                                 pw45.close();
-                                System.out.println("Question deleted successfully.");
+                                System.out.println("Question deleted successfully");
                             }
                             df = false;
                             break;
@@ -515,7 +518,7 @@ public class Quiz {
                             bf.close();
                             int rqn;
                             do {
-                                System.out.println("Enter the question number of the question to be replaced:");
+                                System.out.println("Enter the question number of the question to be replaced");
                                 try {
                                     rqn = sc.nextInt();
                                     sc.nextLine();
@@ -532,19 +535,20 @@ public class Quiz {
                             } else {
                                 System.out.println("Enter the new question statement.");
                                 String nqs = sc.nextLine();
-                                System.out.println("Enter the first answer choice:");
+                                System.out.println("Enter the first option");
                                 String firstOption = sc.nextLine();
                                 firstOption = "A) " + firstOption + "\n";
-                                System.out.println("Enter the second answer choice:");
+                                System.out.println("Enter the second option");
                                 String secondOption = sc.nextLine();
                                 secondOption = "B) " + secondOption + "\n";
-                                System.out.println("Enter the third answer choice:");
+                                System.out.println("Enter the third option");
                                 String thirdOption = sc.nextLine();
                                 thirdOption = "C) " + thirdOption + "\n";
-                                System.out.println("Enter the fourth answer choice:");
+                                System.out.println("Enter the fourth option and then the answer to this question");
+                                System.out.println("Enter the fourth option");
                                 String fourthOption = sc.nextLine();
-                                System.out.println(
-                                    "Enter the correct answer as either A, B, C or D. The option will be added to the quiz only after the the answer is entered.");
+                                System.out.println("Enter the answer. The option will be added to the quiz only " +
+                                        "after the the answer is entered.");
                                 String answer;
                                 do {
                                     answer = sc.nextLine();
@@ -556,8 +560,8 @@ public class Quiz {
                                     }
                                 } while (true);
                                 fourthOption = "D) " + fourthOption + "\n";
-                                String str3 = str1 + nqs + "\n" + firstOption + secondOption + thirdOption
-                                        + fourthOption;
+                                String str3 = str1 + nqs + "\n" + firstOption + secondOption +
+                                        thirdOption + fourthOption;
                                 if (!s.contains(str2)) {
                                     s = s.substring(0, s.indexOf(str1));
                                     s += str3;
@@ -592,7 +596,7 @@ public class Quiz {
                                 PrintWriter pw45 = new PrintWriter(new FileWriter(f3), true);
                                 pw45.print(l);
                                 pw45.close();
-                                System.out.println("Question replaced successfully.");
+                                System.out.println("Question replaced successfully");
                             }
                             df = false;
                             break;
@@ -602,7 +606,7 @@ public class Quiz {
                             break;
                         }
                         default: {
-                            System.out.println("This is not a valid choice.");
+                            System.out.println("This is not a valid choice");
                             df = false;
                             break;
                         }
@@ -612,3 +616,4 @@ public class Quiz {
         }
     }
 }
+
